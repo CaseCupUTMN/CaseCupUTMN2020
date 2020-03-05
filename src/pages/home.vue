@@ -5,16 +5,19 @@
       <f7-nav-left>
         <f7-link icon-ios="f7:menu" icon-aurora="f7:menu" icon-md="material:menu" panel-open="left"></f7-link>
       </f7-nav-left>
-      <f7-nav-title sliding>CaseCupUTMN2020</f7-nav-title>
+      <f7-nav-title sliding>"EncounterMe"</f7-nav-title>
       <f7-nav-right>
         <f7-link icon-ios="f7:menu" icon-aurora="f7:menu" icon-md="material:menu" panel-open="right"></f7-link>
       </f7-nav-right>
-      <f7-nav-title-large sliding>CaseCupUTMN2020</f7-nav-title-large>
+      <f7-nav-title-large sliding>EncounterMe</f7-nav-title-large>
     </f7-navbar>
 
     <!-- Page content-->
     <f7-block strong>
-      <p>Квест по ориентированию на местности</p>
+      <p>Описание игрового процесса</p>
+      <p>Городской квест "Encounter" представляет собой командную тактическую игру,
+направленную на логику и ориентирование на местности. В приложении "EncounterMe!"
+требуется реализовать вид игры "Точка".</p>
     </f7-block>
 
     <f7-block-title>Navigation</f7-block-title>
