@@ -14,9 +14,7 @@
 
     <!-- Page content-->
     <f7-block strong>
-      <p>This is an example of tabs-layout application. The main point of such tabbed layout is that each tab contains independent view with its own routing and navigation.</p>
-
-      <p>Each tab/view may have different layout, different navbar type (dynamic, fixed or static) or without navbar like this tab.</p>
+      <p>Квест по ориентированию на местности</p>
     </f7-block>
 
     <f7-block-title>Navigation</f7-block-title>
