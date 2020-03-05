@@ -3,6 +3,7 @@
 ## Framework7 CLI Options
 
 Framework7 app created with following options:
+npm run start-через консоль компилируется и запускается проект
 
 ```
 {
