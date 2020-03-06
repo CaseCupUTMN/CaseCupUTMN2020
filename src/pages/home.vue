@@ -26,14 +26,14 @@
       <f7-list-item link="/form/" title="Form"></f7-list-item>
     </f7-list>
 
-    <f7-block-title>Modals</f7-block-title>
+     <f7-block-title>Modals</f7-block-title>
     <f7-block strong>
       <f7-row>
         <f7-col width="50">
-          <f7-button fill raised popup-open="#my-popup">Popup</f7-button>
+          <f7-button fill raised login-screen-open="#register-screen">Register</f7-button>
         </f7-col>
         <f7-col width="50">
-          <f7-button fill raised login-screen-open="#my-login-screen">Login Screen</f7-button>
+          <f7-button fill raised login-screen-open="#login-screen">Login Screen</f7-button>
         </f7-col>
       </f7-row>
     </f7-block>
