@@ -81,19 +81,19 @@
             type="text"
             name="username"
             placeholder="Your username"
-            
+            :value="username"
             @input="username = $event.target.value"
           ></f7-list-input>
           <f7-list-input
             type="password"
             name="password"
             placeholder="Your password"
-            
+            :value="password"
             @input="password = $event.target.value"
           ></f7-list-input>
         </f7-list>
         <f7-list>
-          <f7-list-button title="Sign Up" @click="alertRegisterData"></f7-list-button>
+          <f7-list-button title="Sign Up" @click="alertLoginData"></f7-list-button>
           <f7-block-footer>
             Some text about login information.<br>Click "Sign In" to close Login Screen
           </f7-block-footer>
@@ -123,78 +123,14 @@
         // Login screen data
         username: '',
         password: '',
-        list_username: [],
-        list_password: [],
       }
     },
     methods: {
       alertLoginData() {
-        let error=true;
-      
-        if(this.username=='' ||  this.password==''){
-          //Тут будет код для вывода ошибки
-          this.$f7.dialog.alert("Одно из полей пустое");
-        }
-        if(this.username && this.password){
+        this.$f7.dialog.alert('Username: ' + this.username + '<br>Password: ' + this.password, () => {
+          this.$f7.loginScreen.close();
           
-          if(this.list_username.length!=0){
-          for(let i=0;i<this.list_username.length;i++){
-            if(this.username==this.list_username[i]){
-              if(this.password==this.list_password[i]){
-                error=false;
-                this.$f7.dialog.alert('Вы успешно вошли', () => {
-                   this.$f7.loginScreen.close();
-                    });
-              }else{
-                 this.$f7.dialog.alert('Не верный пароль');
-              }
-            }
-          }
-          if(error){
-            this.$f7.dialog.alert('Не верный логин или пароль');
-          }
-          }else{
-           
-             this.$f7.dialog.alert('База данных пуста Зарегистрируйтесь', () => {
-         
-              this.$f7.loginScreen.close();
         });
-        }
-        }
-       
-      },
-      alertRegisterData() {
-        let error=false;
-        if(this.username=='' ||  this.password==''){
-          //Тут будет код для вывода ошибки
-          this.$f7.dialog.alert("Одно из полей пустое");
-        }
-      if(this.username && this.password){
-          if(this.list_username.length!=0){
-          for(let i=0;i<this.list_username.length;i++){
-            if(this.username==this.list_username[i]){
-              //Вывести о том что такой пользователь есть
-              error=true;
-              
-               this.$f7.dialog.alert('Пользователь с ником '+this.username+' уже есть');
-               break;
-            }
-          }
-          if(!error){
-            this.list_username.push(this.username);
-            this.list_password.push(this.password);
-               this.$f7.dialog.alert('Вы успешно зарегистрировались Ваши данные <br>Username: ' + this.username + '<br>Password: ' + this.password, () => {
-                this.$f7.loginScreen.close();
-                });
-          }
-          }else{
-            this.list_username.push(this.username);
-            this.list_password.push(this.password);
-             this.$f7.dialog.alert('Вы успешно зарегистрировались Ваши данные <br>Username: ' + this.username + '<br>Password: ' + this.password, () => {
-                this.$f7.loginScreen.close();
-                });
-        }
-        }
       }
     },
     mounted() {
