@@ -163,7 +163,7 @@
              this.$f7.dialog.alert('Вы успешно зарегистрировались Ваши данные <br>Username: ' + this.username + '<br>Password: ' + this.password, () => {
                 this.$f7.loginScreen.close();
                 });
-        }
+          }
         }
       }
     },
