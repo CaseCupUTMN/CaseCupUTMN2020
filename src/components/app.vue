@@ -16,7 +16,7 @@
 
 
   
-<f7-login-screen id="login-screen" theme-dark>
+<f7-login-screen id="login-screen" theme-dark :opened="loginScreenOpened">
     <f7-view>
       <f7-page login-screen>
         <f7-navbar back-link="" ></f7-navbar>
@@ -38,7 +38,7 @@
         <f7-list>
 <f7-button fill @click="alertLoginData">Войти</f7-button>
           <f7-block-footer>
-          Еще не создали аккаунт?<br><f7-list-button >Зарегистрироваться</f7-list-button>
+          Еще не создали аккаунт?<br><f7-list-button @click="viewOpen('#register-screen')">Зарегистрироваться</f7-list-button>
           </f7-block-footer>
         </f7-list>
       </f7-page>
@@ -47,7 +47,7 @@
   <f7-login-screen id="register-screen" theme-dark >
     <f7-view>
       <f7-page login-screen >
-        <f7-navbar back-link="Back" ></f7-navbar>
+        <f7-navbar @click="back" back-link="Back" ></f7-navbar>
         <f7-login-screen-title>Регистрация</f7-login-screen-title>
         <f7-list form>
           <f7-list-input
@@ -63,9 +63,9 @@
           ></f7-list-input>
         </f7-list>
         <f7-list>
-          <f7-button fill @click="alertRegisterData">Зарегистрироваться</f7-button>
+          <f7-button fill @click="alertRegisterData()">Зарегистрироваться</f7-button>
           <f7-block-footer>
-            Уже есть аккаунт?<f7-list-button title="Войти"></f7-list-button>
+            Уже есть аккаунт?<f7-list-button @click="viewOpen('#login-screen')">Войти</f7-list-button>
           </f7-block-footer>
         </f7-list>
       </f7-page>
@@ -98,6 +98,15 @@
       }
     },
     methods: {
+      viewOpen(str){
+         this.$f7.loginScreen.close();
+        this.$f7.loginScreen.open(str);
+        
+      },
+     back(){
+       this.$f7.dialog.alert('Не верный пароль');
+         this.$f7.loginScreen.close();
+     },
       alertLoginData() {
         let error=true;
       
@@ -126,8 +135,10 @@
           }else{
            
              this.$f7.dialog.alert('База данных пуста Зарегистрируйтесь', () => {
-         
-              this.$f7.loginScreen.close();
+              this.username='';
+              this.password='';
+              this.viewOpen('#register-screen');
+              
         });
         }
         }
