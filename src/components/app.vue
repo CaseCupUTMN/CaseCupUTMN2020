@@ -19,7 +19,6 @@
 <f7-login-screen id="login-screen" theme-dark :opened="loginScreenOpened">
     <f7-view>
       <f7-page login-screen>
-        <f7-navbar back-link="" ></f7-navbar>
         <f7-login-screen-title>Вход</f7-login-screen-title>
         <f7-list form>
           <f7-list-input
@@ -47,7 +46,6 @@
   <f7-login-screen id="register-screen" theme-dark >
     <f7-view>
       <f7-page login-screen >
-        <f7-navbar @click="back" back-link="Back" ></f7-navbar>
         <f7-login-screen-title>Регистрация</f7-login-screen-title>
         <f7-list form>
           <f7-list-input
