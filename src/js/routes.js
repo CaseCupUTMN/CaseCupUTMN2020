@@ -1,7 +1,6 @@
-
 import HomePage from '../pages/home.vue';
 import AboutPage from '../pages/about.vue';
-import FormPage from '../pages/form.vue';
+import ProfilePage from '../pages/profile.vue';
 import CatalogPage from '../pages/catalog.vue';
 import ProductPage from '../pages/product.vue';
 import SettingsPage from '../pages/settings.vue';
@@ -20,8 +19,8 @@ var routes = [
     component: AboutPage,
   },
   {
-    path: '/form/',
-    component: FormPage,
+    path: '/profile/',
+    component: ProfilePage,
   },
   {
     path: '/catalog/',
