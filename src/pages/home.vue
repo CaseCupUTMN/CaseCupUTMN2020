@@ -1,10 +1,7 @@
 <template>
-  <f7-page name="home">
+  <f7-page name="home" theme-dark>
     <!-- Top Navbar -->
     <f7-navbar :sliding="false" large>
-      <f7-nav-left>
-        <f7-link icon-ios="f7:menu" icon-aurora="f7:menu" icon-md="material:menu" panel-open="left"></f7-link>
-      </f7-nav-left>
       <f7-nav-title sliding>"EncounterMe"</f7-nav-title>
       <f7-nav-right>
         <f7-link icon-ios="f7:menu" icon-aurora="f7:menu" icon-md="material:menu" panel-open="right"></f7-link>
@@ -14,56 +11,24 @@
 
     <!-- Page content-->
     <f7-block strong>
-      <p>Описание игрового процесса</p>
-      <p>Городской квест "Encounter" представляет собой командную тактическую игру,
-направленную на логику и ориентирование на местности. В приложении "EncounterMe!"
-требуется реализовать вид игры "Точка".</p>
+      <p>Описание приложения</p>
     </f7-block>
-
-    <f7-block-title>Navigation</f7-block-title>
+    <f7-block-title>Меню</f7-block-title>
     <f7-list>
-      <f7-list-item link="/about/" title="About"></f7-list-item>
-      <f7-list-item link="/form/" title="Form"></f7-list-item>
+      <f7-list-item link="/about/" title="Информация"></f7-list-item>
+      <f7-list-item link="/profile/" title="Профиль"></f7-list-item>
     </f7-list>
 
-     <f7-block-title>Modals</f7-block-title>
+    <f7-block-title>Выберите действие</f7-block-title>
     <f7-block strong>
       <f7-row>
         <f7-col width="50">
-          <f7-button fill raised login-screen-open="#register-screen">Register</f7-button>
+          <f7-button fill raised login-screen-open="#register-screen">Регистрация</f7-button>
         </f7-col>
         <f7-col width="50">
-          <f7-button fill raised login-screen-open="#login-screen">Login Screen</f7-button>
+          <f7-button fill raised login-screen-open="#login-screen">Авторизация</f7-button>
         </f7-col>
       </f7-row>
     </f7-block>
-
-    <f7-block-title>Panels</f7-block-title>
-    <f7-block strong>
-      <f7-row>
-        <f7-col width="50">
-          <f7-button fill raised panel-open="left">Left Panel</f7-button>
-        </f7-col>
-        <f7-col width="50">
-          <f7-button fill raised panel-open="right">Right Panel</f7-button>
-        </f7-col>
-      </f7-row>
-    </f7-block>
-
-    <f7-list>
-      <f7-list-item
-        title="Dynamic (Component) Route"
-        link="/dynamic-route/blog/45/post/125/?foo=bar#about"
-      ></f7-list-item>
-      <f7-list-item
-        title="Default Route (404)"
-        link="/load-something-that-doesnt-exist/"
-      ></f7-list-item>
-      <f7-list-item
-        title="Request Data & Load"
-        link="/request-and-load/user/123456/"
-      ></f7-list-item>
-    </f7-list>
-
   </f7-page>
 </template>
