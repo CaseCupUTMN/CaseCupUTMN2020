@@ -1,7 +1,7 @@
 import HomePage from '../pages/home.vue';
 import AboutPage from '../pages/about.vue';
 import ProfilePage from '../pages/profile.vue';
-import CatalogPage from '../pages/catalog.vue';
+import AllgamesPage from '../pages/allgames.vue';
 import ProductPage from '../pages/product.vue';
 import SettingsPage from '../pages/settings.vue';
 
@@ -23,8 +23,8 @@ var routes = [
     component: ProfilePage,
   },
   {
-    path: '/catalog/',
-    component: CatalogPage,
+    path: '/allgames/',
+    component: AllgamesPage,
   },
   {
     path: '/product/:id/',
