@@ -117,6 +117,25 @@
        
       }
     },
-  
+    mounted() {
+    if (localStorage.username!='' && localStorage.password!='' && localStorage.flag) {
+      this.username = localStorage.username;
+       this.password = localStorage.password;
+        this.$f7.loginScreen.close("#login-screen");
+        this.$f7.loginScreen.close("#register-screen");
+    }
+    
+  },
+ 
+    
+    mounted() {
+      this.$f7ready((f7) => {
+        if(localStorage.username!='' && localStorage.password!='' && localStorage.flag){
+          this.$f7.loginScreen.close("#login-screen");
+        this.$f7.loginScreen.close("#register-screen");
+        }
+        // Call F7 APIs here
+      });
+    }
   }
 </script>
