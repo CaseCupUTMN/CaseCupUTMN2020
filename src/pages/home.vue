@@ -11,14 +11,9 @@
 
     <!-- Page content-->
     <f7-block strong>
-      <p>Описание приложения</p>
+      <p>Игры, в которых вы зарегистрированны.</p>
     </f7-block>
-    <f7-block-title>Меню</f7-block-title>
-    <f7-list>
-      <f7-list-item link="/about/" title="Информация"></f7-list-item>
-      <f7-list-item link="/profile/" title="Профиль"></f7-list-item>
-    </f7-list>
-
+    
     
   </f7-page>
 </template>

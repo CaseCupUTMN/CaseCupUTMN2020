@@ -1,9 +1,11 @@
 import HomePage from '../pages/home.vue';
 import AboutPage from '../pages/about.vue';
 import ProfilePage from '../pages/profile.vue';
-import CatalogPage from '../pages/catalog.vue';
+import AllgamesPage from '../pages/allgames.vue';
 import ProductPage from '../pages/product.vue';
 import SettingsPage from '../pages/settings.vue';
+import LoginPage from '../pages/login.vue';
+import RegisterPage from '../pages/register.vue';
 
 import DynamicRoutePage from '../pages/dynamic-route.vue';
 import RequestAndLoad from '../pages/request-and-load.vue';
@@ -19,12 +21,20 @@ var routes = [
     component: AboutPage,
   },
   {
+    path: '/register/',
+    component: RegisterPage,
+  },
+  {
+    path: '/login/',
+    component: LoginPage,
+  },
+  {
     path: '/profile/',
     component: ProfilePage,
   },
   {
-    path: '/catalog/',
-    component: CatalogPage,
+    path: '/allgames/',
+    component: AllgamesPage,
   },
   {
     path: '/product/:id/',
@@ -34,7 +44,7 @@ var routes = [
     path: '/settings/',
     component: SettingsPage,
   },
-
+  
   {
     path: '/dynamic-route/blog/:blogId/post/:postId/',
     component: DynamicRoutePage,
