@@ -139,32 +139,79 @@
         needRegister: false,
         username: '',
         password: '',
+        token:'',
+        flag:false,
       }
     },
+    
     methods: {
+      saveLocal(){
+          localStorage.username = this.username;
+          localStorage.password = this.password;
+          localStorage.token= this.token; 
+          localStorage.flag=true;
+      },
+      
       tryLogin() {
+       
+        if(this.username=='' ||  this.password==''){
+          this.$f7.dialog.alert("Одно из полей пустое");
+        }
+        else{
         this.$f7.request.postJSON('http://localhost:5000/users/login', {
           name: this.username,
           password: this.password
         }, (data) => {
           if (data.error) {
             return console.error(data.error);
-          }
+          } 
+          this.token='1';//=data.token;
+          this.saveLocal();
           this.needLogin = false;
         });
+        }
       },
       tryRegister() {
-        this.needRegister = false;
-        this.needLogin = false;
+        if(this.username=='' ||  this.password==''){
+          //Тут будет код для вывода ошибки
+          
+          this.$f7.dialog.alert("Одно из полей пустое");
+        }
+        else{
+         /* this.$f7.request.postJSON('http://localhost:5000/users/register', {
+          name: this.username,
+          password: this.password
+        }, (data) => {
+          if (data.error) {
+            return console.error(data.error);
+          } 
+          this.token='1';//=data.token;
+          saveLocal();
+          this.needRegister = false;
+           this.needLogin = false;
+        });*/
+         this.token='1';//=data.token;
+          this.saveLocal();
+          this.needRegister = false;
+           this.needLogin = false;
+          }
+       
       }
     },
     mounted() {
       this.$f7ready((f7) => {
+       
         // Init cordova APIs (see cordova-app.js)
         if (Device.cordova) {
           cordovaApp.init(f7);
         }
         // Call F7 APIs here
+        
+        if(localStorage.username !='' && localStorage.password !='' && localStorage.token!='' && localStorage.flag){
+          this.needRegister = false;
+          this.needLogin = false;
+         
+        }
       });
     }
   }
