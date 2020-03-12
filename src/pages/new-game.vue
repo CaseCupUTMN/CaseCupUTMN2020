@@ -29,7 +29,7 @@
     </f7-list>
 
     <f7-block>
-      <f7-button large round fill>Далее</f7-button>
+      <f7-button href="/game/:id" large round fill>Далее</f7-button>
     </f7-block>
   </f7-page>
 </template>

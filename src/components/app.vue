@@ -4,7 +4,7 @@
     <f7-view>
       <f7-page>
         <f7-navbar>
-          <f7-nav-title>Квест "Hidden Codes"</f7-nav-title>
+          <f7-nav-title>ENCOUTER ME</f7-nav-title>
           <f7-nav-right>
             <f7-link icon-f7="menu" panel-close="right"></f7-link>
           </f7-nav-right>
@@ -21,7 +21,7 @@
           </f7-list-item>
         </f7-list>
         <f7-toolbar bottom no-shadow>
-          <f7-block-footer class="no-margin-vertical">v.0.0.1. &copy;SEON Cloud</f7-block-footer>
+          <f7-block-footer class="no-margin-vertical">v.1.0 &copy;Encouterme</f7-block-footer>
         </f7-toolbar>
       </f7-page>
     </f7-view>
@@ -34,7 +34,7 @@
     <f7-navbar sliding>
       <f7-nav-left :back-link="$f7 && $f7.views.main.router.currentRoute.url !== '/'" back-link-force>
       </f7-nav-left>
-      <f7-nav-title>Квест "Hidden Codes"</f7-nav-title>
+      <f7-nav-title>ENCOUTER ME</f7-nav-title>
       <f7-nav-right>
         <f7-link icon-f7="menu" panel-open="right"></f7-link>
       </f7-nav-right>
@@ -158,7 +158,7 @@
           this.$f7.dialog.alert("Одно из полей пустое");
         }
         else{
-        this.$f7.request.postJSON('http://localhost:5000/users/login', {
+        this.$f7.request.postJSON('http://localhost:8081/users/login', {
           name: this.username,
           password: this.password
         }, (data) => {

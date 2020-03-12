@@ -16,7 +16,6 @@
         <option>Не указан</option>
         <option>Мужской</option>
         <option>Женский</option>
-        <option>Другой</option>
       </f7-list-input>
 
       <f7-list-input
@@ -32,10 +31,16 @@
         placeholder="Введите чтобы изменить"
         clear-button
       ></f7-list-input>
-    </f7-list>
+
+    
+        <f7-list-input
+        type="textarea"
+        placeholder="О себе"
+      ></f7-list-input>
+
 
     <f7-block>
-      <f7-button large round fill>Сохранить</f7-button>
+      <f7-button back large round fill>Сохранить</f7-button>
     </f7-block>
   </f7-page>
 </template>

@@ -3,6 +3,7 @@
     <f7-toolbar tabbar bottom labels>
       <f7-link tab-link-active tab-link="#all-games" text="Все игры" icon-f7="layers_alt"></f7-link>
       <f7-link tab-link="#current-games" text="Я участник" icon-f7="person_crop_circle_badge_checkmark"></f7-link>
+      <f7-link tab-link="#user-score" text="Мои достижения" icon-f7="star_circle"></f7-link>
     </f7-toolbar>
 
     <f7-tabs animated swipeable>
@@ -33,6 +34,10 @@
         <f7-block v-if="!games.current.length">
           <f7-block-footer class="text-align-center">Вы не зарегистрированы ни в одной игре</f7-block-footer>
         </f7-block>
+      </f7-page-content>
+        <f7-page-content tab id="user-score" ptr @ptr:refresh="refreshCurrent">
+       <br>
+          <f7-block-footer class="text-align-center">Здесь будет информация об уровне игрока</f7-block-footer>
       </f7-page-content>
     </f7-tabs>
   </f7-page>
