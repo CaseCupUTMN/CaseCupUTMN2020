@@ -14,22 +14,19 @@
   <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap: content:">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
 
-  <meta name="theme-color" content="#50c878">
+  <meta name="theme-color" content="#007aff">
   <meta name="format-detection" content="telephone=no">
   <meta name="msapplication-tap-highlight" content="no">
-  <title>CaseCupUTMN2020</title>
-  
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="apple-touch-icon" href="static/icons/apple-touch-icon.png">
-  <link rel="icon" href="static/icons/favicon.png">
-  
-  
+  <title>Hidden Codes</title>
+
   <!-- built styles file will be auto injected -->
 </head>
 <body>
   <div id="app"></div>
-  
+  <% if (process.env.TARGET === 'cordova') { %>
+  <script src="cordova.js"></script>
+  <% } %>
+  <script type="text/javascript" src="https://api-maps.yandex.ru/2.1/?apikey=f9e20ad6-f892-406b-a4ce-ed0cd746b189&lang=ru_RU"></script>
   <!-- built script files will be auto injected -->
 </body>
 </html>

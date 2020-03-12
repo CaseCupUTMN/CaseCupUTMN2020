@@ -1,78 +1,111 @@
 <template>
-<f7-app :params="f7params" >
-   <!-- Right panel with reveal effect-->
-  <f7-panel right reveal theme-dark>
+<f7-app :params="f7params" class="color-theme-teal">
+  <f7-panel right>
     <f7-view>
       <f7-page>
-        <f7-navbar title="EncouterMe"></f7-navbar>
-        <f7-block></f7-block>
+        <f7-navbar>
+          <f7-nav-title>Квест "Hidden Codes"</f7-nav-title>
+          <f7-nav-right>
+            <f7-link icon-f7="menu" panel-close="right"></f7-link>
+          </f7-nav-right>
+        </f7-navbar>
+        <f7-list no-hairlines class="no-margin-vertical" no-chevron>
+          <f7-list-item view=".view-main" panel-close link="/" title="Список игр">
+            <f7-icon slot="media" f7="layers_alt"></f7-icon>
+          </f7-list-item>
+          <f7-list-item view=".view-main" panel-close link="/profile/" title="Мой профиль">
+            <f7-icon slot="media" f7="person"></f7-icon>
+          </f7-list-item>
+          <f7-list-item view=".view-main" panel-close link="/about/" title="О приложении">
+            <f7-icon slot="media" f7="question_diamond"></f7-icon>
+          </f7-list-item>
+        </f7-list>
+        <f7-toolbar bottom no-shadow>
+          <f7-block-footer class="no-margin-vertical">v.0.0.1. &copy;SEON Cloud</f7-block-footer>
+        </f7-toolbar>
       </f7-page>
     </f7-view>
   </f7-panel>
 
 
   <!-- Your main view, should have "view-main" class -->
-  <f7-view main class="safe-areas" url="/"></f7-view>
+  <f7-view main class="safe-areas" url="/">
+    <!-- Top Navbar -->
+    <f7-navbar sliding>
+      <f7-nav-left :back-link="$f7 && $f7.views.main.router.currentRoute.url !== '/'" back-link-force>
+      </f7-nav-left>
+      <f7-nav-title>Квест "Hidden Codes"</f7-nav-title>
+      <f7-nav-right>
+        <f7-link icon-f7="menu" panel-open="right"></f7-link>
+      </f7-nav-right>
+    </f7-navbar>
+  </f7-view>
 
-
-  
-<f7-login-screen id="login-screen" theme-dark :opened="loginScreenOpened">
+  <f7-login-screen id="login-screen" :opened="needLogin">
     <f7-view>
-      <f7-page login-screen>
+      <f7-page name="login" login-screen>
         <f7-login-screen-title>Вход</f7-login-screen-title>
         <f7-list form>
           <f7-list-input
             type="text"
-            placeholder="Имя пользователя или почта"
+            name="username"
+            placeholder="Имя пользователя"
             :value="username"
             @input="username = $event.target.value"
           ></f7-list-input>
           <f7-list-input
             type="password"
-         placeholder="Пароль"
+            name="password"
+            placeholder="Пароль"
             :value="password"
             @input="password = $event.target.value"
           ></f7-list-input>
         </f7-list>
-        <f7-list>
-<f7-button fill @click="alertLoginData">Войти</f7-button>
+        <f7-block>
+          <f7-button large fill @click="tryLogin">Войти</f7-button>
           <f7-block-footer>
-          Еще не создали аккаунт?<br><f7-list-button @click="viewOpen('#register-screen')">Зарегистрироваться</f7-list-button>
+            Ещё не создали аккаунт?<br><f7-link @click="needRegister = true">Зарегистрироваться</f7-link>
           </f7-block-footer>
-        </f7-list>
+        </f7-block>
       </f7-page>
     </f7-view>
   </f7-login-screen>
-  <f7-login-screen id="register-screen" theme-dark >
+
+  <f7-login-screen id="register-screen" :opened="needRegister">
     <f7-view>
-      <f7-page login-screen >
+      <f7-page name="register" login-screen>
         <f7-login-screen-title>Регистрация</f7-login-screen-title>
         <f7-list form>
           <f7-list-input
             type="text"
-          placeholder="Имя пользователя или почта"
-            
+            name="username"
+            placeholder="Имя пользователя"
+            :value="username"
             @input="username = $event.target.value"
           ></f7-list-input>
           <f7-list-input
             type="password"
-           placeholder="Пароль"
+            name="password"
+            placeholder="Пароль"
+            :value="password"
             @input="password = $event.target.value"
           ></f7-list-input>
         </f7-list>
-        <f7-list>
-          <f7-button fill @click="alertRegisterData()">Зарегистрироваться</f7-button>
+        <f7-block>
+          <f7-button large fill @click="tryRegister">Зарегистрироваться</f7-button>
           <f7-block-footer>
-            Уже есть аккаунт?<f7-list-button @click="viewOpen('#login-screen')">Войти</f7-list-button>
+            Уже есть аккаунт?<br><f7-link @click="needRegister = false">Войти</f7-link>
           </f7-block-footer>
-        </f7-list>
+        </f7-block>
       </f7-page>
     </f7-view>
   </f7-login-screen>
+
 </f7-app>
 </template>
 <script>
-
+  import { Device }  from 'framework7/framework7-lite.esm.bundle.js';
+  import cordovaApp from '../js/cordova-app.js';
   import routes from '../js/routes.js';
 
   export default {
@@ -80,105 +113,57 @@
       return {
         // Framework7 Parameters
         f7params: {
+          id: 'cloud.seon.app.encounterMe!', // App bundle ID
           name: 'EncounterMe!', // App name
-          theme: 'auto', // Automatic theme detection
-
+          theme: 'md', // Material design for all platforms
+          autoDarkTheme: true,
 
           // App routes
           routes: routes,
+
+          // Input settings
+          input: {
+            scrollIntoViewOnFocus: Device.cordova && !Device.electron,
+            scrollIntoViewCentered: Device.cordova && !Device.electron,
+          },
+
+          // Cordova Statusbar settings
+          statusbar: {
+            iosOverlaysWebView: true,
+            androidOverlaysWebView: false,
+          },
         },
-        loginScreenOpened:true,
+
         // Login screen data
+        needLogin: true,
+        needRegister: false,
         username: '',
         password: '',
-        list_username: [],
-        list_password: [],
       }
     },
     methods: {
-      viewOpen(str){
-         this.$f7.loginScreen.close();
-        this.$f7.loginScreen.open(str);
-        
-      },
-     back(){
-       this.$f7.dialog.alert('Не верный пароль');
-         this.$f7.loginScreen.close();
-     },
-      alertLoginData() {
-        let error=true;
-      
-        if(this.username=='' ||  this.password==''){
-          //Тут будет код для вывода ошибки
-          this.$f7.dialog.alert("Одно из полей пустое");
-        }
-        if(this.username && this.password){
-          
-          if(this.list_username.length!=0){
-          for(let i=0;i<this.list_username.length;i++){
-            if(this.username==this.list_username[i]){
-              if(this.password==this.list_password[i]){
-                error=false;
-                this.$f7.dialog.alert('Вы успешно вошли', () => {
-                   this.$f7.loginScreen.close();
-                    });
-              }else{
-                 this.$f7.dialog.alert('Не верный пароль');
-              }
-            }
+      tryLogin() {
+        this.$f7.request.postJSON('http://localhost:5000/users/login', {
+          name: this.username,
+          password: this.password
+        }, (data) => {
+          if (data.error) {
+            return console.error(data.error);
           }
-          if(error){
-            this.$f7.dialog.alert('Не верный логин или пароль');
-          }
-          }else{
-           
-             this.$f7.dialog.alert('База данных пуста Зарегистрируйтесь', () => {
-              this.username='';
-              this.password='';
-              this.viewOpen('#register-screen');
-              
+          this.needLogin = false;
         });
-        }
-        }
-       
       },
-      alertRegisterData() {
-        let error=false;
-        if(this.username=='' ||  this.password==''){
-          //Тут будет код для вывода ошибки
-          this.$f7.dialog.alert("Одно из полей пустое");
-        }
-      if(this.username && this.password){
-          if(this.list_username.length!=0){
-          for(let i=0;i<this.list_username.length;i++){
-            if(this.username==this.list_username[i]){
-              //Вывести о том что такой пользователь есть
-              error=true;
-              
-               this.$f7.dialog.alert('Пользователь с ником '+this.username+' уже есть');
-               break;
-            }
-          }
-          if(!error){
-            this.list_username.push(this.username);
-            this.list_password.push(this.password);
-               this.$f7.dialog.alert('Вы успешно зарегистрировались Ваши данные <br>Username: ' + this.username + '<br>Password: ' + this.password, () => {
-                this.$f7.loginScreen.close();
-                });
-          }
-          }else{
-            this.list_username.push(this.username);
-            this.list_password.push(this.password);
-             this.$f7.dialog.alert('Вы успешно зарегистрировались Ваши данные <br>Username: ' + this.username + '<br>Password: ' + this.password, () => {
-                this.$f7.loginScreen.close();
-                });
-        }
-        }
+      tryRegister() {
+        this.needRegister = false;
+        this.needLogin = false;
       }
     },
     mounted() {
       this.$f7ready((f7) => {
-        
+        // Init cordova APIs (see cordova-app.js)
+        if (Device.cordova) {
+          cordovaApp.init(f7);
+        }
         // Call F7 APIs here
       });
     }
