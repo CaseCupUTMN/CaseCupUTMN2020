@@ -1,44 +1,54 @@
 <template>
-  <f7-page name="profile">
-    <f7-block-title medium>Мой профиль</f7-block-title>
-    <f7-list no-hairlines>
+  <f7-page name="Profile" >
+    <f7-navbar title="EncouterMe" back-link="Back"></f7-navbar>
+    <f7-block-title>Мой профиль</f7-block-title>
+    <f7-list no-hairlines-md>
       <f7-list-input
-        label="Имя"
         type="text"
-        floating-label
-        clear-button
+        placeholder="Ваше имя"
+        :value="username"
+        @input="username = $event.target.value"
+      ></f7-list-input>
+
+      <f7-list-input
+        label="E-mail"
+        type="email"
+        placeholder="E-mail"
+      ></f7-list-input>
+      <f7-list-input
+
+        type="password"
+        placeholder="Ваш пароль"
+         :value="password"
+         @input="password = $event.target.value"
+      ></f7-list-input>
+
+      <f7-list-input
+        type="tel"
+        placeholder="Телефон"
       ></f7-list-input>
 
       <f7-list-input
         label="Пол"
         type="select"
-      >
-        <option>Не указан</option>
+        >
+        <option>Не выбрано</option>
         <option>Мужской</option>
         <option>Женский</option>
       </f7-list-input>
 
       <f7-list-input
-        label="Дата рождения"
-        type="datepicker"
-        floating-label
-        readonly
+        type="date"
+        placeholder="Дата рождения"
       ></f7-list-input>
+
 
       <f7-list-input
-        type="password"
-        label="Пароль"
-        placeholder="Введите чтобы изменить"
-        clear-button
-      ></f7-list-input>
-
-    
-        <f7-list-input
         type="textarea"
         placeholder="О себе"
       ></f7-list-input>
-
-
+    </f7-list>
+   
     <f7-block>
       <f7-button back large round fill>Сохранить</f7-button>
     </f7-block>
