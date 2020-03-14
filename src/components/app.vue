@@ -132,6 +132,7 @@
             iosOverlaysWebView: true,
             androidOverlaysWebView: false,
           },
+        
         },
 
         // Login screen data
@@ -145,6 +146,9 @@
     },
     
     methods: {
+      errorAlert(error){
+          this.$f7.dialog.alert(error);
+      },
       saveLocal(){
           localStorage.username = this.username;
           localStorage.password = this.password;
@@ -155,7 +159,7 @@
       tryLogin() {
        
         if(this.username=='' ||  this.password==''){
-          this.$f7.dialog.alert("Одно из полей пустое");
+            this.errorAlert("Одно из полей пустое");
         }
         else{
         this.$f7.request.postJSON('http://localhost:8081/users/login', {
@@ -175,7 +179,7 @@
         if(this.username=='' ||  this.password==''){
           //Тут будет код для вывода ошибки
           
-          this.$f7.dialog.alert("Одно из полей пустое");
+          this.errorAlert("Одно из полей пустое");
         }
         else{
          /* this.$f7.request.postJSON('http://localhost:5000/users/register', {
