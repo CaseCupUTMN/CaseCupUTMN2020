@@ -26,8 +26,6 @@
       </f7-page>
     </f7-view>
   </f7-panel>
-
-
   <!-- Your main view, should have "view-main" class -->
   <f7-view main class="safe-areas" url="/">
     <!-- Top Navbar -->
@@ -40,7 +38,6 @@
       </f7-nav-right>
     </f7-navbar>
   </f7-view>
-
   <f7-login-screen id="login-screen" :opened="needLogin">
     <f7-view>
       <f7-page name="login" login-screen>
@@ -70,7 +67,6 @@
       </f7-page>
     </f7-view>
   </f7-login-screen>
-
   <f7-login-screen id="register-screen" :opened="needRegister">
     <f7-view>
       <f7-page name="register" login-screen>
@@ -100,14 +96,12 @@
       </f7-page>
     </f7-view>
   </f7-login-screen>
-
 </f7-app>
 </template>
 <script>
   import { Device }  from 'framework7/framework7-lite.esm.bundle.js';
   import cordovaApp from '../js/cordova-app.js';
   import routes from '../js/routes.js';
-
   export default {
     data() {
       return {
@@ -117,16 +111,13 @@
           name: 'EncounterMe!', // App name
           theme: 'md', // Material design for all platforms
           autoDarkTheme: true,
-
           // App routes
           routes: routes,
-
           // Input settings
           input: {
             scrollIntoViewOnFocus: Device.cordova && !Device.electron,
             scrollIntoViewCentered: Device.cordova && !Device.electron,
           },
-
           // Cordova Statusbar settings
           statusbar: {
             iosOverlaysWebView: true,
@@ -134,7 +125,6 @@
           },
         
         },
-
         // Login screen data
         needLogin: true,
         needRegister: false,
@@ -159,6 +149,7 @@
       tryLogin() {
        
         if(this.username=='' ||  this.password==''){
+          this.$f7.dialog.alert("Одно из полей пустое");
             this.errorAlert("Одно из полей пустое");
         }
         else{
@@ -179,6 +170,7 @@
         if(this.username=='' ||  this.password==''){
           //Тут будет код для вывода ошибки
           
+          this.$f7.dialog.alert("Одно из полей пустое");
           this.errorAlert("Одно из полей пустое");
         }
         else{
