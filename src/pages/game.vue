@@ -60,13 +60,47 @@ export default {
   },
 
   methods: {
+   
     onTabPointsShow() {
       ymaps.ready(() => {
-        map = new ymaps.Map("map", {
+        var map = new ymaps.Map("map", {
           center: [57.153033, 65.534328],
           zoom: 12,
-          controls: []
+          controls: ['zoomControl']
         });
+        map.controls.add('geolocationControl');
+        var myCollection = new ymaps.GeoObjectCollection({}, {
+    preset: 'islands#redIcon', //все метки красные
+    draggable: true // и их можно перемещать
+});
+
+        map.events.add('click', function (e) {
+        // Получение координат щелчка
+             var coords = e.get('coords');
+             //alert(coords[0]);
+              var myGeoObject = new ymaps.GeoObject({
+              geometry: {
+                  type: "Point", // тип геометрии - точка
+                  coordinates: [coords[0], coords[1]] // координаты точки
+                }
+                });
+              myGeoObject.events.add('click', function (e) {
+              // Получение координат щелчка
+                var coords = e.get('coords');
+                alert(coords.join(', '));
+                myCollection.add(myGeoObject);
+                myCollection.removeAll();
+              });
+              
+              map.geoObjects.add(myGeoObject);
+        });
+        /*var myGeoObject = new ymaps.GeoObject({
+              geometry: {
+                  type: "Point", // тип геометрии - точка
+                  coordinates: [coords[0], coords[1]] // координаты точки
+                }
+        });
+        map.geoObjects.add(myGeoObject);*/
       });
     },
 
