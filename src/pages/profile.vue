@@ -28,15 +28,10 @@
         readonly
         @change="bithday = $event.target.value"  
       ></f7-list-input>
-
-      <f7-list-input
-        type="password"
-        label="Пароль"
-        placeholder="Введите чтобы изменить"
-        clear-button
-      ></f7-list-input>
+        <f7-block-footer>
+        <f7-link @click="editPassword()">Изменить пароль</f7-link>
+        </f7-block-footer>
     </f7-list>
-
     <f7-block>
       <f7-button large round fill @click="save()">Сохранить</f7-button>
     </f7-block>
@@ -46,6 +41,7 @@
 import { Device }  from 'framework7/framework7-lite.esm.bundle.js';
 import cordovaApp from '../js/cordova-app.js';
 import routes from '../js/routes.js';
+
 export default {
      data() {
       return {
@@ -76,10 +72,17 @@ export default {
         gender: '',
         bithday:'',
         newpassword:'',
-      
+
+  
+
       }
     },
     methods: {
+       editPassword() {
+        const app = this.$f7;
+        app.dialog.password('Введите новый пароль','Изменение пароля', (password) => {
+        })
+      },
       errorAlert(error){
           this.$f7.dialog.alert(error);    
       },

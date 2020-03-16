@@ -7,9 +7,20 @@
     </f7-toolbar>
     <f7-tabs animated>
       <f7-page-content tab tab-active id="info">
-        <f7-block-title medium>Игра</f7-block-title>
+      <f7-block-title medium>Игра</f7-block-title>
+  <f7-list accordion-list>
+  <f7-list-item accordion-item title="Информация о игре">
+    <f7-accordion-content>
+      <f7-list>
+        <f7-list-item title="Название игры:"></f7-list-item>
+        <f7-list-item title="Дата проведения:"></f7-list-item>
+        <f7-list-item title="Участники:"></f7-list-item>
+        <f7-list-item title="Описание:"></f7-list-item>
+      </f7-list>
+    </f7-accordion-content>
+  </f7-list-item>
+</f7-list>
       </f7-page-content>
-
       <f7-page-content tab id="points" @tab:show="onTabPointsShow" @tab:hide="onTabPointsHide">
         <div id="map" style="width: 100%; height: 100%"></div>
       </f7-page-content>
