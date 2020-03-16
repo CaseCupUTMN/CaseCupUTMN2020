@@ -1,18 +1,18 @@
 {
-  "name": "casecuputmn2020",
+  "name": "encounterme!",
   "private": true,
   "version": "1.0.0",
-  "description": "CaseCupUTMN2020",
+  "description": "EncounterMe!",
   "repository": "",
   "license": "UNLICENSED",
   "framework7": {
-    "cwd": "C:\\Users\\Макс\\Desktop\\CaseCupUTMN2020",
+    "cwd": "C:\\Users\\makar\\Documents\\EncounterMe",
     "type": [
       "web"
     ],
-    "name": "CaseCupUTMN2020",
+    "name": "EncounterMe!",
     "framework": "vue",
-    "template": "tabs",
+    "template": "single-view",
     "cssPreProcessor": "less",
     "bundler": "webpack",
     "webpack": {
@@ -23,8 +23,8 @@
       "inlineAssets": true
     },
     "theming": {
-      "customColor": true,
-      "color": "#50c878",
+      "customColor": false,
+      "color": "#007aff",
       "darkTheme": false,
       "iconFonts": true,
       "fillBars": false
@@ -47,12 +47,14 @@
     "Samsung >= 5"
   ],
   "dependencies": {
+    "axios": "^0.19.2",
     "dom7": "^2.1.3",
     "framework7": "^5.4.5",
     "framework7-icons": "^3.0.0",
     "framework7-vue": "^5.4.5",
     "template7": "^1.4.2",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vuex": "^3.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.8.7",
@@ -64,7 +66,7 @@
     "chalk": "^3.0.0",
     "copy-webpack-plugin": "^5.1.1",
     "cpy-cli": "^3.1.0",
-    "cross-env": "^7.0.1",
+    "cross-env": "^7.0.2",
     "css-loader": "^3.4.2",
     "file-loader": "^5.1.0",
     "html-webpack-plugin": "^3.2.0",

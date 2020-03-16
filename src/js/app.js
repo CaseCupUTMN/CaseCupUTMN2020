@@ -21,12 +21,13 @@ import App from '../components/app.vue';
 Framework7.use(Framework7Vue);
 
 // Init App
-new Vue({
+var app=new Vue({
   el: '#app',
   render: (h) => h(App),
-
+  
   // Register App Component
   components: {
     app: App
   },
+ 
 });
