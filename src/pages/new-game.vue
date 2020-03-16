@@ -134,7 +134,8 @@
               */ 
                 
                 this.$f7.dialog.alert("Вы успешно создали игру");
-                window.location.href="/";
+                this.$f7router.back();
+                //window.location.href="/";
             }  
           }
          
@@ -149,6 +150,7 @@
               zoom: 12,
               controls: ['zoomControl']
             });
+            
             var myCollection = new ymaps.GeoObjectCollection({}, {
         /*preset: 'islands#redIcon', //все метки красные
         draggable: true // и их можно перемещать*/
@@ -167,6 +169,7 @@
                   coordinates: [coords[0], coords[1]] // координаты точки
                 }
             });
+
             coordinates.push([coords[0], coords[1]]);
             codes.push(code);
             myGeoObject.events.add('click', function (e) {
