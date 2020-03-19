@@ -38,7 +38,7 @@
             @change="date = $event.target.value"
             ></f7-list-input>
           <f7-list-item title="Кол-во участников">
-          <f7-stepper  :min="0" :value="parseInt(count_players)" :max="50" :step="1" :autorepeat="true" :autorepeat-dynamic="true"
+          <f7-stepper  :min="0"  :max="50" :step="1" :autorepeat="true" :autorepeat-dynamic="true"
           @change="count_players = $event.target.value"
           ></f7-stepper>
           </f7-list-item>
