@@ -108,8 +108,8 @@ let mypoints=[];
 export default {
   data() {
     return {
-      valJoin:false,
-      valAvtor:true,
+      valJoin:true,
+      valAvtor:false,
       valStart:false,
       rating: [],
       routes:routes,
