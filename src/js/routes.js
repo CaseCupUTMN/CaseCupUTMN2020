@@ -3,6 +3,7 @@ import AboutPage from '../pages/about.vue';
 import ProfilePage from '../pages/profile.vue';
 import NewGamePage from '../pages/new-game.vue';
 import GamePage from '../pages/game.vue';
+import EditPage from '../pages/edit.vue';
 
 import NotFoundPage from '../pages/404.vue';
 
@@ -27,6 +28,10 @@ var routes = [
   {
     path: '/game/:id',
     component: GamePage,
+  },
+  {
+    path: '/edit/:id',
+    component: EditPage,
   },
 
   // Default error handler

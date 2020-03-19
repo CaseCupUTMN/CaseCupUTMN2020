@@ -7,12 +7,14 @@
         type="text"
         floating-label
         clear-button
+        :value="name"
         @input="name=$event.target.value"
       ></f7-list-input>
 
       <f7-list-input
         label="Пол"
         type="select"
+        :value="gender"
         @change="gender = $event.target.value"
       >
         <option>Не указан</option>
@@ -26,7 +28,7 @@
         type="datepicker"
         floating-label
         readonly
-        @change="bithday = $event.target.value"  
+        @change="birthday = $event.target.value"  
       ></f7-list-input>
         <f7-block-footer>
         <f7-link @click="editPassword()">Изменить пароль</f7-link>
@@ -41,7 +43,6 @@
 import { Device }  from 'framework7/framework7-lite.esm.bundle.js';
 import cordovaApp from '../js/cordova-app.js';
 import routes from '../js/routes.js';
-
 export default {
      data() {
       return {
@@ -69,33 +70,60 @@ export default {
         
         },
         name: '',
-        gender: '',
-        bithday:'',
+        gender: 'Не указан',
+        birthday:'',
         newpassword:'',
-
-  
-
+      
       }
     },
     methods: {
-       editPassword() {
+      editPassword() {
         const app = this.$f7;
         app.dialog.password('Введите новый пароль','Изменение пароля', (password) => {
+          if(password){
+            if(password.length>5){
+                this.errorAlert("Функция пока что не работает");
+            }
+            else{
+              this.errorAlert("Пароль должен содержать как минимум 5 символов");
+            }
+          }
         })
       },
       errorAlert(error){
           this.$f7.dialog.alert(error);    
       },
       save(){
-        if(this.name=='' || this.bithday=='' || this.gender=='' || this.gender=='Не указан'){
+        if(this.name=='' || this.birthday=='' || this.gender=='' || this.gender=='Не указан'){
             this.errorAlert('Не все поля заполнены!');
         }else{
+           this.$f7.request(
+             'https://app.seon.cloud/hiddencodes/v1.0/profile',
+             "PUT", 
+             {
+             token:localStorage.token,
+             displayName:this.name,
+             sex:this.gender,
+             birthday:this.birthday
+              }, 
+              function (data){
+            if (data.message) {
+            
+            return console.error(data.message);
+            }
+          localStorage.token=data.user.token;
           this.$f7.dialog.alert("Профиль отредактирован");
           this.$f7router.back();
+          });
+         
         }
         
       }
     },
-    
+    mounted() {
+    this.$f7ready((f7) => {
+      document.getElementById("logo").style.display="none";
+    })
+      }    
 }
 </script>

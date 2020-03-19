@@ -4,7 +4,8 @@
     <f7-view>
       <f7-page>
         <f7-navbar>
-          <f7-nav-title>ENCOUTER ME</f7-nav-title>
+         
+          <f7-nav-title>EncounterMe!</f7-nav-title>
           <f7-nav-right>
             <f7-link icon-f7="menu" panel-close="right"></f7-link>
           </f7-nav-right>
@@ -16,12 +17,15 @@
           <f7-list-item view=".view-main" panel-close link="/profile/" title="Мой профиль">
             <f7-icon slot="media" f7="person"></f7-icon>
           </f7-list-item>
-          <f7-list-item view=".view-main" panel-close link="/game/1" title="О приложении">
+          <f7-list-item view=".view-main" panel-close link="/about/" title="О приложении">
             <f7-icon slot="media" f7="question_diamond"></f7-icon>
+          </f7-list-item>
+          <f7-list-item view=".view-main" panel-close link="/" @click="exit" title="Выйти из аккаунта">
+            <f7-icon slot="media" f7="power"></f7-icon>
           </f7-list-item>
         </f7-list>
         <f7-toolbar bottom no-shadow>
-          <f7-block-footer class="no-margin-vertical">v.1.0 &copy;Encouter me!</f7-block-footer>
+          <f7-block-footer class="no-margin-vertical">v.1.0 &copy;EncounterMe!</f7-block-footer>
         </f7-toolbar>
       </f7-page>
     </f7-view>
@@ -33,8 +37,10 @@
     <!-- Top Navbar -->
     <f7-navbar sliding>
       <f7-nav-left :back-link="$f7 && $f7.views.main.router.currentRoute.url !== '/'" back-link-force>
+      
+      <img src="/static/icons/EM.png" id="logo">
       </f7-nav-left>
-      <f7-nav-title>ENCOUTER ME</f7-nav-title>
+      <f7-nav-title>EncounterMe!</f7-nav-title>
       <f7-nav-right>
         <f7-link icon-f7="menu" panel-open="right"></f7-link>
       </f7-nav-right>
@@ -103,6 +109,15 @@
 
 </f7-app>
 </template>
+<style lang="less" scoped>
+  img{
+        width: 100%;
+  }
+  .safe-areas .left{
+    width: 10%;
+    margin-left: 3%;
+  }
+</style>
 <script>
   import { Device }  from 'framework7/framework7-lite.esm.bundle.js';
   import cordovaApp from '../js/cordova-app.js';
@@ -142,10 +157,18 @@
         password: '',
         token:'',
         flag:false,
+        
       }
     },
     
     methods: {
+      exit(){
+        localStorage.username = "";
+        localStorage.password ="";
+        localStorage.token= ""; 
+        localStorage.flag=false;
+        this.needLogin=true;
+      },
       errorAlert(error){
           this.$f7.dialog.alert(error);
       },
@@ -154,57 +177,74 @@
           localStorage.password = this.password;
           localStorage.token= this.token; 
           localStorage.flag=true;
+          
       },
       
       tryLogin() {
        
         if(this.username=='' ||  this.password==''){
             this.errorAlert("Одно из полей пустое");
+        }else if(this.username.length<5 || this.password.length<5){
+             this.errorAlert("Логин и пароль должны содержать как минимум 5 символов");
         }
         else{
-        this.$f7.request.postJSON('http://localhost:8081/users/login', {
+        this.$f7.request.postJSON('https://app.seon.cloud/hiddencodes/v1.0/login', {
           name: this.username,
           password: this.password
         }, (data) => {
-          if (data.error) {
-            return console.error(data.error);
-          } 
-          this.token='1';//=data.token;
+          if (data.code) {
+            this.errorAlert("Неверный логин или пароль");
+            this.username='';
+          this.password='';
+          }else{
+            this.token=data.user.token;
+          localStorage.user_uuid=data.profile.user_uuid;
           this.saveLocal();
           this.needLogin = false;
+          } 
+        },(error)=>{
+          this.username='';
+          this.password='';
+          this.errorAlert("Неверный логин или пароль");
         });
         }
       },
       tryRegister() {
         if(this.username=='' ||  this.password==''){
-          //Тут будет код для вывода ошибки
           
           this.errorAlert("Одно из полей пустое");
+        }else if(this.username.length<5 || this.password.length<5){
+             this.errorAlert("Логин и пароль должны содержать как минимум 5 символов");
         }
         else{
-         /* this.$f7.request.postJSON('http://localhost:5000/users/register', {
+         
+          this.$f7.request.postJSON('https://app.seon.cloud/hiddencodes/v1.0/register', {
           name: this.username,
-          password: this.password
+          password : this.password
         }, (data) => {
-          if (data.error) {
-            return console.error(data.error);
+          if (data.code) {
+            
+            return console.error(data.message);
           } 
-          this.token='1';//=data.token;
-          saveLocal();
-          this.needRegister = false;
-           this.needLogin = false;
-        });*/
-         this.token='1';//=data.token;
+          this.token=data.user.token;
+          localStorage.user_uuid=data.profile.user_uuid;
           this.saveLocal();
           this.needRegister = false;
-           this.needLogin = false;
+          this.needLogin = false;
+        },(error)=>{
+          this.username='';
+          this.password='';
+          this.errorAlert("Не возможно зарегистрироваться");
+        });
+         
           }
        
       }
     },
     mounted() {
       this.$f7ready((f7) => {
-       
+      document.getElementById("logo").style.display="none";
+        
         // Init cordova APIs (see cordova-app.js)
         if (Device.cordova) {
           cordovaApp.init(f7);
@@ -212,8 +252,19 @@
         // Call F7 APIs here
         
         if(localStorage.username !='' && localStorage.password !='' && localStorage.token!='' && localStorage.flag){
+          this.$f7.request.postJSON('https://app.seon.cloud/hiddencodes/v1.0/login', {
+            token:localStorage.token
+          }, (data) => {
+          if (data.massage) {
+            this.needLogin = true;
+            return console.error(data.message);
+          }
+          localStorage.user_uuid=data.profile.user_uuid;
+          localStorage.uuid=data.profile.uuid;
           this.needRegister = false;
           this.needLogin = false;
+        });
+          
          
         }
       });

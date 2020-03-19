@@ -7,8 +7,8 @@
     </f7-toolbar>
 
     <f7-tabs animated swipeable>
-      <f7-page-content tab tab-active id="all-games" infinite @infinite:refresh="refreshAll"> 
-        <f7-fab position="right-bottom" color="orange" href="/new-game/" >
+      <f7-page-content tab tab-active id="all-games" ptr @ptr:refresh="refreshAll" @tab:show="onTabAllShow">
+        <f7-fab position="right-bottom" color="#00bfad" href="/new-game/" >
           <f7-icon f7="plus"></f7-icon>
         </f7-fab>
         
@@ -34,7 +34,7 @@
        
       </f7-page-content>
 
-      <f7-page-content tab id="current-games" ptr @ptr:refresh="refreshCurrent">
+      <f7-page-content tab id="current-games" ptr @ptr:refresh="refreshCurrent" @tab:show="onTabCurrentShow">
         <template v-if="!games.current.length">
         <f7-block >
           <f7-block-footer class="text-align-center">Вы не зарегистрированы ни в одной игре</f7-block-footer>
@@ -43,7 +43,7 @@
         <template v-else>
         
            <f7-list media-list class="no-margin-vertical">
-            <f7-list-item v-for="item in games.current.all" :key="item.id"
+            <f7-list-item v-for="item in games.current" :key="item.id"
               :title="item.title"
               :link="`/game/${item.id}`"
               :after="`${item.players.current}/${item.players.max} чел.`"
@@ -55,7 +55,10 @@
        
         </template>
       </f7-page-content>
-      
+        <f7-page-content tab id="user-score" ptr @ptr:refresh="refreshCurrent">
+       <br>
+          <f7-block-footer class="text-align-center">Здесь будет информация об уровне игрока</f7-block-footer>
+      </f7-page-content>
     </f7-tabs>
   </f7-page>
 </template>
@@ -72,15 +75,6 @@ export default {
       loadInProgress: false,
       games: {
         all: [
-          {title:"Знакомство с Тюменью",
-                      id:1,
-                      players:{
-                        current:1,
-                        max:50
-                      },
-                      startDate:"03.15.2020",//(месяц,день,год)
-                      description:"ВЫ пройдете все достопримечательности города Тюмени"
-                    },
         ],
         current: [
           
@@ -90,45 +84,73 @@ export default {
   },
 
   methods: {
-    tabAllShow() {},
-    refreshPush(done){
-      alert("YES");
-      setTimeout(() => {
-        
-        for(let i=20;i<40;i++){
-          this.games.all.push({title:"newgame2",
-                      id:i+1*2,
+    tabAllShow() {
+   
+    },
+    onTabAllShow(){
+        var app=this;
+       this.$f7.request.json('https://app.seon.cloud/hiddencodes/v1.0/games' ,function  (res){
+          if (res.message) {
+            
+            return console.error(res.message);
+          }
+          app.games.all=[];
+          for(let item of res.data){
+            
+            app.games.all.push({
+                      title:item.title,
+                      id:item._id,
                       players:{
-                        current:i,
-                        max:50
+                        current:item.players.length,
+                        max:item.maxPlayers
                       },
-                      startDate:"02.02.2020",
-                      description:"Просто текст"
+
+                      startDate:item.startDate,
+                      description:item.description
                     });
-        }
-        
-        done();
-      }, 1000);
+          }
+       });
     },
     refreshAll(done) {
+      
       setTimeout(() => {
-        for(let i=0;i<19;i++){
-          this.games.all.push({title:"newgame1",
-                      id:i+1*2,
-                      players:{
-                        current:i,
-                        max:50
-                      },
-                      startDate:"02.02.2020",
-                      description:"Просто текст"
-                    });
-        }
-        
+        this.onTabAllShow();
         done();
       }, 1000);
     },
+    onTabCurrentShow(){
+       var app=this;
+         this.$f7.request.json('https://app.seon.cloud/hiddencodes/v1.0/games?filter={"players":"'+localStorage.user_uuid+'"}' ,function  (res){
+          if (res.message) {
+            
+            return console.error(res.message);
+          }
+          app.games.current=[];
+          for(let item of res.data){
+                app.games.current.push(
+                  {
+                      title:item.title,
+                      id:item._id,
+                      players:{
+                        current:item.players.length,
+                        max:item.maxPlayers
+                      },
 
-
+                      startDate:item.startDate,
+                      description:item.description
+                    }
+                );
+             
+            
+        }
+        });
+    },
+    refreshCurrent(done) {
+      setTimeout(() => {
+       this.onTabCurrentShow();
+        done();
+      }, 1000);
+    },
 
     formatDate(value) {
       
@@ -138,7 +160,50 @@ export default {
   },
   mounted() {
     this.$f7ready((f7) => {
-       
+      document.getElementById("logo").style.display="block";
+      localStorage.idgame='';
+          var app=this;
+          app.onTabAllShow();
+          app.onTabCurrentShow();
+          /*this.$f7.request.json('https://app.seon.cloud/hiddencodes/v1.0/games' ,function  (res){
+          if (res.message) {
+            
+            return console.error(res.message);
+          }
+        
+          for(let item of res.data){
+            
+            app.games.all.push({
+                      title:item.title,
+                      id:item._id,
+                      players:{
+                        current:item.players.length,
+                        max:item.maxPlayers
+                      },
+
+                      startDate:item.startDate,
+                      description:item.description
+                    });
+            for(let player of item.players){
+              console.log(player);
+              if(player===localStorage.user_uuid){
+                app.games.current.push(
+                  {
+                      title:item.title,
+                      id:item._id,
+                      players:{
+                        current:item.players.length,
+                        max:item.maxPlayers
+                      },
+
+                      startDate:item.startDate,
+                      description:item.description
+                    }
+                );
+              }
+            }
+        }
+        });*/
     });
   }
 }
