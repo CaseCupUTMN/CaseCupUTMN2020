@@ -24,7 +24,7 @@
               :link="`/game/${item.id}`"
               :after="`${item.players.current}/${item.players.max} чел.`"
               :subtitle="formatDate(item.startDate)"
-              :text="item.description"
+              :text="item.description.substr(0,(item.description.length > 50) ? 40 : item.description.length)"
               chevron-center
             ></f7-list-item> 
            
@@ -48,7 +48,7 @@
               :link="`/game/${item.id}`"
               :after="`${item.players.current}/${item.players.max} чел.`"
               :subtitle="formatDate(item.startDate)"
-              :text="item.description"
+              :text="item.description.substr(0,(item.description.length > 50) ? 10 : item.description.length)"
               chevron-center
             ></f7-list-item>
           </f7-list>
@@ -85,11 +85,11 @@ export default {
 
   methods: {
     tabAllShow() {
-   
+
     },
     onTabAllShow(){
-        var app=this;
-       this.$f7.request.json('https://app.seon.cloud/hiddencodes/v1.0/games' ,function  (res){
+      var app=this;
+      this.$f7.request.json('https://app.seon.cloud/hiddencodes/v1.0/games' ,function  (res){
           if (res.message) {
             
             return console.error(res.message);
@@ -114,7 +114,28 @@ export default {
     refreshAll(done) {
       
       setTimeout(() => {
-        this.onTabAllShow();
+        var app=this;
+      this.$f7.request.json('https://app.seon.cloud/hiddencodes/v1.0/games' ,function  (res){
+          if (res.message) {
+            
+            return console.error(res.message);
+          }
+          app.games.all=[];
+          for(let item of res.data){
+            
+            app.games.all.push({
+                      title:item.title,
+                      id:item._id,
+                      players:{
+                        current:item.players.length,
+                        max:item.maxPlayers
+                      },
+
+                      startDate:item.startDate,
+                      description:item.description
+                    });
+          }
+       });
         done();
       }, 1000);
     },

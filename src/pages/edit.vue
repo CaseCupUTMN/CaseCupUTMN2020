@@ -38,7 +38,7 @@
             @change="date = $event.target.value"
             ></f7-list-input>
           <f7-list-item title="Кол-во участников">
-          <f7-stepper  :min="0"  :max="50" :step="1" :autorepeat="true" :autorepeat-dynamic="true"
+          <f7-stepper  :min="0"   :max="50" :step="1" :autorepeat="true" :autorepeat-dynamic="true"
           @change="count_players = $event.target.value"
           ></f7-stepper>
           </f7-list-item>
@@ -120,13 +120,17 @@ import moment from 'moment';
      formatDate(value) {
       
       //return value ? moment(value).format('DD.MM.YY в HH:mm') : 'дата неизвестна';
-      return value ? moment(value).format('DD.MM.YYYY') : 'дата неизвестна';
+      return value ? moment(value).format('YYYY.MM.DD') : 'дата неизвестна';
     },
     deleting(){
         if(confirm("Вы точно хотите удалить игру?")){
             console.log("Удаление игры");
             console.log(this.$f7route.params.id);
-            this.$f7.request('https://app.seon.cloud/hiddencodes/v1.0/games/'+this.$f7route.params.id,'DELETE'); 
+            this.$f7.request({
+              url :'https://app.seon.cloud/hiddencodes/v1.0/games/'+this.$f7route.params.id,
+              method :"DELETE"}); 
+            this.$f7.dialog.alert("Игра удалена");
+            this.$f7router.back();   
         }
     },
     errorAlert(error){
@@ -139,7 +143,7 @@ import moment from 'moment';
               this.errorAlert('Не все поля заполнены!');
         }else{
             let dat=new Date();
-            let strdat=this.date.split('.');
+            let strdat=app.date.split('.');
             let tdate1=new Date(dat.getFullYear(),dat.getMonth(),dat.getDate());
             
             let tdate=new Date(strdat[2],strdat[1]-1,strdat[0]);
@@ -148,13 +152,18 @@ import moment from 'moment';
             }
             else{
             console.log('https://app.seon.cloud/hiddencodes/v1.0/games/'+this.$f7route.params.id);
-            console.log(this.namegame);
-            this.$f7.request('https://app.seon.cloud/hiddencodes/v1.0/games/'+this.$f7route.params.id,'PUT', {
+            console.log(this.formatDate(tdate));
+             console.log(app.date);
+            this.$f7.request({
+              url:'https://app.seon.cloud/hiddencodes/v1.0/games/'+this.$f7route.params.id,
+              method:"PUT", 
+              data:{
                 title:this.namegame,
                 description:this.description,
-                startDate:tdate,
-                maxPlayers:this.maxPlayers,
+                startDate:this.formatDate(tdate),
+                maxPlayers:this.count_players,
                 points:points
+              }
             });
             this.$f7.dialog.alert("Вы успешно отредактировали игру");
             this.$f7router.back();    
@@ -229,7 +238,7 @@ import moment from 'moment';
                 }
                 points=newpoints;
                 
-                myCollection.add(myGeoObject);
+                myCollection.add(e.get('target'));
                 myCollection.removeAll();
               }
             });

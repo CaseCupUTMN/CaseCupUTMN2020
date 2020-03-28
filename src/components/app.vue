@@ -112,11 +112,46 @@
 <style lang="less" scoped>
   img{
         width: 100%;
-  }
-  .safe-areas .left{
+  }.safe-areas .left{
     width: 10%;
     margin-left: 3%;
   }
+  @media (max-width: 2560px){
+    .safe-areas .left{
+    width: 2%;
+    margin-left: 1%;
+    }
+  }
+  @media (max-width: 1440px){
+    .safe-areas .left{
+    width: 3%;
+    margin-left: 1%;
+    }
+  }
+  @media (max-width: 1024px){
+    .safe-areas .left{
+    width: 4%;
+    margin-left: 1%;
+    }
+  }
+  @media (max-width: 768px){
+    .safe-areas .left{
+    width: 5%;
+    }
+  }
+  @media (max-width: 425px){
+    .safe-areas .left{
+    width: 10%;
+    margin-left: 3%;
+  }
+  }
+   @media (max-width: 320px){
+    .safe-areas .left{
+    width: 11%;
+    margin-left: 4%;
+  }
+  }
+  
 </style>
 <script>
   import { Device }  from 'framework7/framework7-lite.esm.bundle.js';
@@ -166,7 +201,18 @@
         localStorage.username = "";
         localStorage.password ="";
         localStorage.token= ""; 
+        localStorage.user_uuid="";
+        localStorage.uuid="";
+        localStorage.namegame="";
+        localStorage.startDate="";
+        localStorage.maxPlayers="";
+        localStorage.description="";
+        localStorage.points="";
         localStorage.flag=false;
+        this.flag=false;  
+        this.username='';
+        this.password='';
+        this.token='';
         this.needLogin=true;
       },
       errorAlert(error){
@@ -197,8 +243,10 @@
             this.username='';
           this.password='';
           }else{
-            this.token=data.user.token;
+          this.token=data.user.token;
+          localStorage.token=data.user.token;
           localStorage.user_uuid=data.profile.user_uuid;
+          
           this.saveLocal();
           this.needLogin = false;
           } 
@@ -253,18 +301,35 @@
         
         if(localStorage.username !='' && localStorage.password !='' && localStorage.token!='' && localStorage.flag){
           this.$f7.request.postJSON('https://app.seon.cloud/hiddencodes/v1.0/login', {
-            token:localStorage.token
+            name:localStorage.username,
+            password:localStorage.password
           }, (data) => {
-          if (data.massage) {
-            this.needLogin = true;
-            return console.error(data.message);
+          if (data.code) {
+           this.errorAlert("Войдите заново");
+           this.needLogin=true;
           }
           localStorage.user_uuid=data.profile.user_uuid;
           localStorage.uuid=data.profile.uuid;
+          localStorage.token=data.user.token;
+          this.token=data.user.token;
           this.needRegister = false;
           this.needLogin = false;
+         
+          console.log(data.user.token);
+          
+          
+        },(error)=>{
+          if (data.code) {
+           this.errorAlert("Войдите заново");
+           this.needLogin=true;
+          }
         });
           
+      localStorage.namegame="";
+      localStorage.startDate="";
+      localStorage.maxPlayers="";
+      localStorage.description="";
+      localStorage.points="";
          
         }
       });
