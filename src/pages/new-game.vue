@@ -129,12 +129,12 @@ import moment from 'moment';
                 this.errorAlert('Нельзя выбрать прошедшую дату');
             }
             else{
-             
+              console.log(tdate);
               this.$f7.request.postJSON('https://app.seon.cloud/hiddencodes/v1.0/games', {
                 title:this.namegame,
                 description:this.description,
                 startDate:tdate,
-                
+                author:localStorage.user_uuid,
                 maxPlayers:this.count_players,
                 points:points
               }, (data) => {

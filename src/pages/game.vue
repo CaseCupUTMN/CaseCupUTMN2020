@@ -21,6 +21,7 @@
       Участники: Участвует {{item.players.length}} / {{item.maxPlayers}} чел.
   
       </f7-block>
+
       
   <f7-block class="information-box"> Описание:
     {{item.description}}
@@ -111,7 +112,7 @@
 
 <script>
 import moment from 'moment';
- import routes from '../js/routes.js';
+import routes from '../js/routes.js';
 let map = null;
 let points=[];
 let mypoints=[];
@@ -123,7 +124,8 @@ export default {
       valStart:false,
       rating: [],
       routes:routes,
-      data:[]
+      data:[],
+     
     }
   },
 
@@ -141,6 +143,7 @@ export default {
         });
         
         this.valJoin=false;
+        this.onTabInfoShow();
       
     },
     leave(){
@@ -157,6 +160,7 @@ export default {
          
         });
         this.valJoin=true;
+        this.onTabInfoShow();
     },
     edit(){
       
@@ -231,8 +235,15 @@ export default {
             
             myGeoObject.events.add('click', function (e) {
               var coords = e.get('coords');
-              if(item.click){
+              if(app.valAvtor){
+                app.$f7.dialog.alert("Код точки: "+ item.code);  
+              }
+              else if(item.click){
               let code=prompt('Введите код ');
+              console.log(app.$f7route.params.id);
+              console.log(localStorage.user_uuid);
+              console.log(item.id);
+              console.log(item.code);
               if(code){
                 if(code==item.code){
                     
@@ -257,7 +268,7 @@ export default {
             });
             map.geoObjects.add(myGeoObject);
           }
-         
+         console.log(localStorage.user_uuid);
 
         });
     },
@@ -271,7 +282,7 @@ export default {
           }
           
           app.data.splice(0,1,{
-                      id:item._id,
+                      
                       title:item.title,
                       players:[item.players],
                       maxPlayers:item.maxPlayers,
@@ -313,7 +324,9 @@ export default {
    mounted() {
      this.$f7ready((f7) => {
         var app=this;
+        points=[];
         document.getElementById("logo").style.display="none";
+         console.log(app.$f7route.params.id);
           this.$f7.request.json('https://app.seon.cloud/hiddencodes/v1.0/games/'+ app.$f7route.params.id,function  (item){
           if (item.message) {
             
@@ -329,11 +342,13 @@ export default {
                       description:item.description
                     });
           let dat=new Date();
+          console.log(dat+" "+ dat.getTime());
+          
           let strdat=app.formatDate(item.startDate).split('.');
           let tdate1=new Date(dat.getFullYear(),dat.getMonth(),dat.getDate());
-         
+        
           let tdate=new Date(strdat[2],strdat[1]-1,strdat[0]);
-          
+           console.log(tdate+" "+tdate.getTime());
           if(tdate.getTime() <= tdate1.getTime()){
                app.valStart=true;
             }else{
@@ -367,10 +382,11 @@ export default {
               console.log("AUTHOR");
               app.valAvtor=true;
               app.valJoin=false;
+              app.valStart=true;
             }
         
         });
-        
+        console.log(points);
      });
 
    }

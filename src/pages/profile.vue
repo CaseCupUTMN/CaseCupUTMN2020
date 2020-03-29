@@ -35,7 +35,7 @@
         </f7-block-footer>
     </f7-list>
     <f7-block>
-      <f7-button large round fill @click="save()">Сохранить</f7-button>
+      <f7-button large round fill @click="save">Сохранить</f7-button>
     </f7-block>
   </f7-page>
 </template>
@@ -94,28 +94,32 @@ export default {
           this.$f7.dialog.alert(error);    
       },
       save(){
+        
         if(this.name=='' || this.birthday=='' || this.gender=='' || this.gender=='Не указан'){
             this.errorAlert('Не все поля заполнены!');
         }else{
-           this.$f7.request(
-             'https://app.seon.cloud/hiddencodes/v1.0/profile',
-             "PUT", 
+          
+           this.$f7.request({
+             url:"https://app.seon.cloud/hiddencodes/v1.0/profile",
+             method:"PUT",
+             data: 
              {
              token:localStorage.token,
-             displayName:this.name,
-             sex:this.gender,
-             birthday:this.birthday
-              }, 
-              function (data){
-            if (data.message) {
-            
-            return console.error(data.message);
+             profile:{
+                displayName:this.name,
+                sex:this.gender,
+                birthday:this.birthday
+              }
+             
+            },dataType:"json", error(errors) {
+                console.log(errors);
+            },success(data){
+               
             }
-          localStorage.token=data.user.token;
-          this.$f7.dialog.alert("Профиль отредактирован");
-          this.$f7router.back();
-          });
-         
+              });
+            
+            this.$f7.dialog.alert("Профиль отредактирован");
+            this.$f7router.back();
         }
         
       }
