@@ -10,45 +10,35 @@
         <f7-block-title medium>Информация об игре</f7-block-title>
    <template>
     <f7-list v-for="item in data" :key="item.id">
-      <f7-block>
- <f7-block-title class="rectangle">Название:</f7-block-title>
-  <f7-block>
-    <p>{{item.title}} </p>
-  </f7-block>
+      <f7-block class="information-box">
+        Название: {{item.title}}
       </f7-block>
-      <f7-block>
-<f7-block-title class="rectangle" >Дата и время проведения:</f7-block-title>
-  <f7-block>
-    <p>{{formatDate(item.startDate)}} </p>
-  </f7-block>
+      <f7-block class="information-box">
+      Дата и время проведения: {{formatDate(item.startDate)}} 
       </f7-block>
     
-      <f7-block>
-  <f7-block-title class="rectangle">Участники:</f7-block-title>
-  <f7-block>
-    <p>Участвуют {{item.players.length}} / {{item.maxPlayers}} чел. </p>
-  </f7-block>
+      <f7-block class="information-box">
+      Участники: Участвует {{item.players.length}} / {{item.maxPlayers}} чел.
+  
       </f7-block>
-      <f7-block>
-  <f7-block-title class="rectangle">Описание:</f7-block-title>
-  <f7-block>
-    <p> {{item.description}}</p>
+      
+  <f7-block class="information-box"> Описание:
+    {{item.description}}
   </f7-block>
-      </f7-block>
+<template v-if="!valStart">
+     <f7-block class="information-box">Статус игры: Игра еще не началась!</f7-block>
+   </template>
     </f7-list>
   </template>
    <f7-block v-if="valJoin">
-<f7-button  large round fill @click="join">Присоединиться к игре</f7-button>
+<f7-button class="button" large round fill @click="join">Присоединиться к игре</f7-button>
    </f7-block>
    <f7-block v-else-if="!valAvtor">
-<f7-button large round fill @click="leave">Покинуть игру</f7-button>
+<f7-button class="button" large round fill @click="leave">Покинуть игру</f7-button>
    </f7-block>
    <f7-block v-else>
-     <f7-button large round fill @click="edit" >Редактировать игру</f7-button>
+     <f7-button class="button" large round fill @click="edit" >Редактировать игру</f7-button>
    </f7-block>
-   <template v-if="!valStart">
-     <f7-block>Игра еще не началась</f7-block>
-   </template>
  </f7-page-content>
      <!-- <f7-page-content tab id="points" @tab:show="onTabPointsShow" @tab:hide="onTabPointsHide">
         <div id="map" style="width: 100%; height: 100%"></div>
@@ -95,8 +85,28 @@
     line-height: 36px;
     text-indent: 10px;
     background: #dedede;
-    height: 36px;
-}
+    height: 70px;
+    border: 2px solid #000; /* Черная рамка */
+    border-radius: 10px;
+    
+    }
+  .information-box {
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #dbdbdb;
+    line-height: 1.5;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin: 15px;
+    background: #808080;
+    min-height: 50px;
+    border: 2px solid #333333; /* Черная рамка */
+    border-radius: 10px;
+  }
+  .button {
+    margin: 10px;
+    text-align: center;
+  }
 </style>
 
 <script>

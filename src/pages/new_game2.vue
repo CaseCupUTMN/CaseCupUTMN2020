@@ -7,7 +7,7 @@
  
       <f7-tabs animated >
       <f7-page-content tab tab-active id="info">
-        <f7-block-title medium>Новая игра</f7-block-title>
+      <f7-block-title medium>Новая игра</f7-block-title>
         
     <f7-fab position="right-bottom" color="orange">
     <f7-icon f7="plus"></f7-icon>
@@ -26,10 +26,12 @@
       ></f7-list-input>
       <f7-list-input
         label="Дата проведения"
-        type="datepicker"
+        type="datetime-local"
         floating-label
         readonly
         @change="date = $event.target.value"
+        >
+        <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
       ></f7-list-input>
       <f7-list-item title="Кол-во участников">
         <f7-stepper :value="0" :min="0" :max="50" :step="1" :autorepeat="true" :autorepeat-dynamic="true"

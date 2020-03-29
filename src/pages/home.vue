@@ -7,7 +7,7 @@
     </f7-toolbar>
 
     <f7-tabs animated swipeable>
-      <f7-page-content tab tab-active id="all-games" ptr @ptr:refresh="refreshAll" @tab:show="onTabAllShow">
+      <f7-page-content tab tab-active id="all-games" infinite @infinite:refresh="InfiniteRefreshAll" ptr @ptr:refresh="refreshAll" @tab:show="onTabAllShow">
         <f7-fab position="right-bottom" color="#00bfad" href="/new-game/" >
           <f7-icon f7="plus"></f7-icon>
         </f7-fab>
@@ -77,7 +77,6 @@ export default {
         all: [
         ],
         current: [
-          
         ]
       }
     }
@@ -111,12 +110,20 @@ export default {
           }
        });
     },
-    refreshAll(done) {
-      
+    refreshAll(done) { 
       setTimeout(() => {
         this.onTabAllShow();
         done();
       }, 1000);
+    },
+    InfiniteRefreshAll(done) {
+      var progress=(false);
+      if (progress == true){
+      setTimeout(() => {
+        this.onTabAllShow();
+        done();
+      }, 1000);
+      }
     },
     onTabCurrentShow(){
        var app=this;

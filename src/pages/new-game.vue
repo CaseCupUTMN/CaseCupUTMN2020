@@ -12,10 +12,8 @@
       <f7-tabs animated >
       <f7-page-content tab tab-active id="info">
         <f7-block-title medium>Новая игра</f7-block-title>
-        
-  
   <f7-list no-hairlines>
-        <f7-list-input
+        <f7-list-input 
         label="Название"
         type="text"
         floating-label
@@ -23,12 +21,13 @@
         @input="namegame = $event.target.value"
       ></f7-list-input>
       <f7-list-input
-        label="Дата проведения"
-        type="datepicker"
-       
-        floating-label
-        readonly
-        
+        label="Дата и время начала игры"
+        type="datetime-local"
+        @change="date = $event.target.value"
+      ></f7-list-input>
+      <f7-list-input
+        label="Продолжительность игры"
+        type="time"
         @change="date = $event.target.value"
       ></f7-list-input>
       <f7-list-item title="Кол-во участников">
