@@ -6,7 +6,7 @@
       <f7-link tab-link="#rating" text="Рейтинг" icon-f7="stopwatch"></f7-link>
     </f7-toolbar>
     <f7-tabs animated>
-      <f7-page-content tab tab-active id="info" @tab:show="onTabInfoShow">
+     <f7-page-content tab tab-active id="info" @tab:show="onTabInfoShow">
         <f7-block-title medium>Информация об игре</f7-block-title>
    <template>
     <f7-list v-for="item in data" :key="item.id">
@@ -16,7 +16,9 @@
       <f7-block class="information-box">
       Дата и время проведения: {{formatDate(item.startDate)}} 
       </f7-block>
-    
+     <f7-block class="information-box">
+      Дата и время окончания: {{formatDate(item.endDate)}} 
+      </f7-block>
       <f7-block class="information-box">
       Участники: Участвует {{item.players.length}} / {{item.maxPlayers}} чел.
   
@@ -109,6 +111,7 @@
     text-align: center;
   }
 </style>
+
 
 <script>
 import moment from 'moment';
@@ -287,6 +290,7 @@ export default {
                       players:[item.players],
                       maxPlayers:item.maxPlayers,
                       startDate:item.startDate,
+                      endDate:item.endDate,
                       description:item.description
                     });
 
@@ -311,14 +315,24 @@ export default {
     formatDate(value) {
       
       //return value ? moment(value).format('DD.MM.YY в HH:mm') : 'дата неизвестна';
+      return value ? moment(value).format('DD.MM.YYYY в HH:mm') : 'дата неизвестна';
+    },
+    gettime(value){
+       return value ? moment(value).format('HH:mm') : '-1';
+    },
+    formatDate1(value) {
+      
+      //return value ? moment(value).format('DD.MM.YY в HH:mm') : 'дата неизвестна';
       return value ? moment(value).format('DD.MM.YYYY') : 'дата неизвестна';
     },
-
     onTabPointsHide() {
       if (map) {
         map.destroy();
       }
-    }
+    },
+    getNormDate(value){
+        return new Date(value.split("-")[0],value.split("-")[1]-1,value.split("-")[2].split("T")[0],value.split("-")[2].split("T")[1].split(":")[0],value.split("-")[2].split("T")[1].split(":")[1]);
+    },
   },
   
    mounted() {
@@ -333,23 +347,26 @@ export default {
             return console.error(item.message);
           }
           
+          
+          let dat=new Date();
+          console.log(item.startDate.split("-"));
+          let strdat=app.formatDate1(item.startDate).split('.');
+          console.log(item.startDate);
+          console.log(item.endDate);
+          let tdate=app.getNormDate(item.startDate);
+            //new Date(item.startDate.split("-")[0],item.startDate.split("-")[1]-1,item.startDate.split("-")[2].split("T")[0],item.startDate.split("-")[2].split("T")[1].split(":")[0],item.startDate.split("-")[2].split("T")[1].split(":")[1]);
+          console.log(tdate);
+          console.log(tdate.getTime()+" "+dat.getTime());
           app.data.push({
                       title:item.title,
                       id:item._id,
                       players:item.players,
                       maxPlayers:item.maxPlayers,
-                      startDate:item.startDate,
+                      endDate:app.getNormDate(item.endDate),
+                      startDate:app.getNormDate(item.startDate),
                       description:item.description
                     });
-          let dat=new Date();
-          console.log(dat+" "+ dat.getTime());
-          
-          let strdat=app.formatDate(item.startDate).split('.');
-          let tdate1=new Date(dat.getFullYear(),dat.getMonth(),dat.getDate());
-        
-          let tdate=new Date(strdat[2],strdat[1]-1,strdat[0]);
-           console.log(tdate+" "+tdate.getTime());
-          if(tdate.getTime() <= tdate1.getTime()){
+          if(tdate.getTime() <= dat.getTime()){
                app.valStart=true;
             }else{
               app.valStart=false;

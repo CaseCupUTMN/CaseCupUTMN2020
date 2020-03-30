@@ -29,14 +29,15 @@
             @input="namegame = $event.target.value"
             ></f7-list-input>
           <f7-list-input
-            label="Дата проведения"
-            type="datepicker"
-            
-            floating-label
-            readonly
-           
-            @change="date = $event.target.value"
-            ></f7-list-input>
+        label="Дата и время начала игры"
+        type="datetime-local"
+        @change="date = $event.target.value"
+      ></f7-list-input>
+       <f7-list-input
+        label="Продолжительность игры"
+        type="time"
+        @change="time = $event.target.value"
+      ></f7-list-input>
           <f7-list-item title="Кол-во участников">
           <f7-stepper  :min="0"   :max="50" :step="1" :autorepeat="true" :autorepeat-dynamic="true"
           @change="count_players = $event.target.value"
@@ -112,7 +113,7 @@ import moment from 'moment';
         date: '',
         count_players:0,
         description:'',
-        
+        time:'',
       }
     },
     
@@ -120,7 +121,7 @@ import moment from 'moment';
      formatDate(value) {
       
       //return value ? moment(value).format('DD.MM.YY в HH:mm') : 'дата неизвестна';
-      return value ? moment(value).format('YYYY.MM.DD') : 'дата неизвестна';
+      return value ? moment(value).format('DD.MM.YYYY') : 'дата неизвестна';
     },
     deleting(){
         if(confirm("Вы точно хотите удалить игру?")){
@@ -130,44 +131,54 @@ import moment from 'moment';
               url :'https://app.seon.cloud/hiddencodes/v1.0/games/'+this.$f7route.params.id,
               method :"DELETE"}); 
             this.$f7.dialog.alert("Игра удалена");
-            this.$f7router.back();   
+            this.$f7router.back();  
+            document.getElementById("logo").style.display="block"; 
         }
     },
     errorAlert(error){
           this.$f7.dialog.alert(error);
            
       },
+    gettime(value){
+       return value ? moment(value).format('DD.MM.YYYY HH:mm') : '-1';
+    },
+    getDateTime(value){
+       return value ? moment(value).format('YYYY-MM-DD HH:mm') : '-1';
+    },
     editing(){
         var app=this;
-      if(this.namegame=='' || this.date=='' || this.count_players=='' || this.description==''||  metka==0){
+        console.log(this.gettime(this.date).split(' ')[0]);
+      if(this.namegame=='' || this.date=='' || this.gettime(this.date)=='-1' || this.time==''|| this.count_players=='' || this.description==''||  metka==0){
               this.errorAlert('Не все поля заполнены!');
         }else{
-            let dat=new Date();
-            let strdat=app.date.split('.');
-            let tdate1=new Date(dat.getFullYear(),dat.getMonth(),dat.getDate());
+           let dat=new Date();
+            let strdat=this.formatDate(this.date).split('.');
+            let tdate=new Date(strdat[2],strdat[1]-1,strdat[0],this.gettime(this.date).split(' ')[1].split(':')[0],this.gettime(this.date).split(' ')[1].split(':')[1]);
             
-            let tdate=new Date(strdat[2],strdat[1]-1,strdat[0]);
-            if(tdate.getTime() < tdate1.getTime()){
+            if(tdate.getTime() < dat.getTime()){
                 this.errorAlert('Нельзя выбрать прошедшую дату');
             }
             else{
+              let enddate=new Date(strdat[2],strdat[1]-1,strdat[0],parseInt(this.gettime(this.date).split(' ')[1].split(":")[0])+parseInt(this.time.split(":")[0]),parseInt(this.gettime(this.date).split(' ')[1].split(":")[1])+parseInt(this.time.split(":")[1]));
+            
             console.log('https://app.seon.cloud/hiddencodes/v1.0/games/'+this.$f7route.params.id);
             console.log(this.formatDate(tdate));
-             console.log(app.date);
+             console.log("endDate"+enddate);
             this.$f7.request({
-              url:'https://app.seon.cloud/hiddencodes/v1.0/games/'+this.$f7route.params.id,
+              url:'https://app.seon.cloud/hiddencodes/v1.0/games/'+app.$f7route.params.id,
               method:"PUT", 
               data:{
                 title:this.namegame,
                 description:this.description,
-                startDate:this.formatDate(tdate),
+                startDate:app.getDateTime(tdate),
+                endDate:app.getDateTime(enddate),
                 maxPlayers:this.count_players,
                 points:points
               }
             });
             this.$f7.dialog.alert("Вы успешно отредактировали игру");
             this.$f7router.back();    
-            
+             document.getElementById("logo").style.display="block";
             }  
           }
     },
@@ -185,7 +196,7 @@ import moment from 'moment';
           if(app.$f7route.params.id){
               this.namegame=localStorage.namegame;
               
-              this.count_players=parseInt(localStorage.maxPlayers);
+              //this.count_players=parseInt(localStorage.maxPlayers);
               this.description=localStorage.description;
               points=JSON.parse(localStorage.points);
               

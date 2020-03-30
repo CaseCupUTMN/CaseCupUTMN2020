@@ -12,8 +12,10 @@
       <f7-tabs animated >
       <f7-page-content tab tab-active id="info">
         <f7-block-title medium>Новая игра</f7-block-title>
+        
+  
   <f7-list no-hairlines>
-        <f7-list-input 
+        <f7-list-input
         label="Название"
         type="text"
         floating-label
@@ -25,10 +27,10 @@
         type="datetime-local"
         @change="date = $event.target.value"
       ></f7-list-input>
-      <f7-list-input
+       <f7-list-input
         label="Продолжительность игры"
         type="time"
-        @change="date = $event.target.value"
+        @change="time = $event.target.value"
       ></f7-list-input>
       <f7-list-item title="Кол-во участников">
         <f7-stepper :value="0" :min="0" :max="50" :step="1" :autorepeat="true" :autorepeat-dynamic="true"
@@ -101,7 +103,7 @@ import moment from 'moment';
         date: '',
         count_players:0,
         description:'',
-      
+        time:'',
       }
     },
     
@@ -111,29 +113,34 @@ import moment from 'moment';
       //return value ? moment(value).format('DD.MM.YY в HH:mm') : 'дата неизвестна';
       return value ? moment(value).format('DD.MM.YYYY') : 'дата неизвестна';
     },
+   gettime(value){
+       return value ? moment(value).format('DD.MM.YYYY HH:mm') : '-1';
+    },
       errorAlert(error){
           this.$f7.dialog.alert(error);    
       },
       next(){
 
-          if(this.namegame=='' || this.date=='' || this.count_players=='' || this.description==''||  metka==0){
+          if(this.namegame=='' || this.date==''|| this.gettime(this.date)=='-1' || this.time==''|| this.count_players=='' || this.description==''||  metka==0){
               this.errorAlert('Не все поля заполнены!');
           }
           else{
-            let dat=new Date();
-            let strdat=this.date.split('.');
-            let tdate1=new Date(dat.getFullYear(),dat.getMonth(),dat.getDate());
+             let dat=new Date();
+            let strdat=this.formatDate(this.date).split('.');
+            let tdate=new Date(strdat[2],strdat[1]-1,strdat[0],this.gettime(this.date).split(' ')[1].split(':')[0],this.gettime(this.date).split(' ')[1].split(':')[1]);
             
-            let tdate=new Date(strdat[2],strdat[1]-1,strdat[0]);
-            if(tdate.getTime() < tdate1.getTime()){
+            if(tdate.getTime() < dat.getTime()){
                 this.errorAlert('Нельзя выбрать прошедшую дату');
             }
             else{
-              console.log(tdate);
+               let enddate=new Date(strdat[2],strdat[1]-1,strdat[0],parseInt(this.gettime(this.date).split(' ')[1].split(":")[0])+parseInt(this.time.split(":")[0]),parseInt(this.gettime(this.date).split(' ')[1].split(":")[1])+parseInt(this.time.split(":")[1]));
+            
+              console.log(enddate);
               this.$f7.request.postJSON('https://app.seon.cloud/hiddencodes/v1.0/games', {
                 title:this.namegame,
                 description:this.description,
                 startDate:tdate,
+                endDate:enddate,
                 author:localStorage.user_uuid,
                 maxPlayers:this.count_players,
                 points:points

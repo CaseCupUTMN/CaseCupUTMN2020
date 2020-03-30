@@ -7,7 +7,7 @@
     </f7-toolbar>
 
     <f7-tabs animated swipeable>
-      <f7-page-content tab tab-active id="all-games" infinite @infinite:refresh="InfiniteRefreshAll" ptr @ptr:refresh="refreshAll" @tab:show="onTabAllShow">
+      <f7-page-content tab tab-active id="all-games" ptr @ptr:refresh="refreshAll" @tab:show="onTabAllShow">
         <f7-fab position="right-bottom" color="#00bfad" href="/new-game/" >
           <f7-icon f7="plus"></f7-icon>
         </f7-fab>
@@ -77,6 +77,7 @@ export default {
         all: [
         ],
         current: [
+          
         ]
       }
     }
@@ -84,7 +85,8 @@ export default {
 
   methods: {
     tabAllShow() {
-
+      
+      this.onTabAllShow();
     },
     onTabAllShow(){
       var app=this;
@@ -95,7 +97,7 @@ export default {
           }
           app.games.all=[];
           for(let item of res.data){
-            
+           
             app.games.all.push({
                       title:item.title,
                       id:item._id,
@@ -104,21 +106,14 @@ export default {
                         max:item.maxPlayers
                       },
 
-                      startDate:item.startDate,
+                      startDate:app.getNormDate(item.startDate),
                       description:item.description
                     });
           }
        });
     },
-    refreshAll(done) { 
-      setTimeout(() => {
-        this.onTabAllShow();
-        done();
-      }, 1000);
-    },
-    InfiniteRefreshAll(done) {
-      var progress=(false);
-      if (progress == true){
+    refreshAll(done) {
+      
       setTimeout(() => {
         var app=this;
       this.$f7.request.json('https://app.seon.cloud/hiddencodes/v1.0/games' ,function  (res){
@@ -137,14 +132,13 @@ export default {
                         max:item.maxPlayers
                       },
 
-                      startDate:item.startDate,
+                      startDate:app.getNormDate(item.startDate),
                       description:item.description
                     });
           }
        });
         done();
       }, 1000);
-      }
     },
     onTabCurrentShow(){
        var app=this;
@@ -164,7 +158,7 @@ export default {
                         max:item.maxPlayers
                       },
 
-                      startDate:item.startDate,
+                      startDate:app.getNormDate(item.startDate),
                       description:item.description
                     }
                 );
@@ -179,11 +173,13 @@ export default {
         done();
       }, 1000);
     },
-
+    getNormDate(value){
+        return new Date(value.split("-")[0],value.split("-")[1]-1,value.split("-")[2].split("T")[0],value.split("-")[2].split("T")[1].split(":")[0],value.split("-")[2].split("T")[1].split(":")[1]);
+    },
     formatDate(value) {
       
-      //return value ? moment(value).format('DD.MM.YY в HH:mm') : 'дата неизвестна';
-      return value ? moment(value).format('DD.MM.YY') : 'дата неизвестна';
+      return value ? moment(value).format('DD.MM.YY в HH:mm') : 'дата неизвестна';
+     // return value ? moment(value).format('DD.MM.YY') : 'дата неизвестна';
     }
   },
   mounted() {
