@@ -151,6 +151,7 @@ import moment from 'moment';
                }
              
                this.$f7.dialog.alert("Вы успешно создали игру");
+               document.getElementById("logo").style.display="block";
                 this.$f7router.back();
               },(error)=>{
                 this.errorAlert("Ошибка при создании игры!");

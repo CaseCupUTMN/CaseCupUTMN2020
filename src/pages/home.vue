@@ -55,10 +55,7 @@
        
         </template>
       </f7-page-content>
-        <f7-page-content tab id="user-score" ptr @ptr:refresh="refreshCurrent">
-       <br>
-          <f7-block-footer class="text-align-center">Здесь будет информация об уровне игрока</f7-block-footer>
-      </f7-page-content>
+       
     </f7-tabs>
   </f7-page>
 </template>

@@ -142,11 +142,11 @@ export default {
             
             return console.error(data.message);
           }
-          
+          this.valJoin=false;
+        this.onTabInfoShow();
         });
         
-        this.valJoin=false;
-        this.onTabInfoShow();
+        
       
     },
     leave(){
@@ -159,11 +159,11 @@ export default {
             return console.error(item.message);
           }
           
-          
+           this.valJoin=true;
+        this.onTabInfoShow();
          
         });
-        this.valJoin=true;
-        this.onTabInfoShow();
+       
     },
     edit(){
       
@@ -287,28 +287,34 @@ export default {
           app.data.splice(0,1,{
                       
                       title:item.title,
-                      players:[item.players],
+                      players:item.players,
                       maxPlayers:item.maxPlayers,
-                      startDate:item.startDate,
-                      endDate:item.endDate,
+                      startDate:app.getNormDate(item.startDate),
+                      endDate:app.getNormDate(item.endDate),
                       description:item.description
                     });
+          console.log(app.data[0].players);
 
         });
     },
     onTabRatingShow(){
+      var app=this;
       this.$f7.request.json('https://app.seon.cloud/hiddencodes/v1.0/games/'+ this.$f7route.params.id,function  (item){
           if (item.message) {
             
             return console.error(item.message);
           }
-          for(let rat in item.results){
-            this.rating.push({
+          console.log(item.results);
+          app.rating=item.results;
+          console.log(app.rating);
+         /* for(let rat in item.results){
+            app.rating.push({
               user:rat.user,
               time:rat.time,
-              points:rat.reachedPoints.length
+              points:rat.reachedPoints
             });
-          }
+            console.log(app.rating);
+          }*/
 
         });
     },
@@ -366,6 +372,7 @@ export default {
                       startDate:app.getNormDate(item.startDate),
                       description:item.description
                     });
+          console.log(app.data[0].players);
           if(tdate.getTime() <= dat.getTime()){
                app.valStart=true;
             }else{
