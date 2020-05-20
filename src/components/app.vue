@@ -38,7 +38,7 @@
     <f7-navbar sliding>
       <f7-nav-left :back-link="$f7 && $f7.views.main.router.currentRoute.url !== '/'" back-link-force>
       
-      <img src="/static/icons/EM.png" id="logo">
+      <img src="static/icons/EM.png" id="logo">
       </f7-nav-left>
       <f7-nav-title>EncounterMe!</f7-nav-title>
       <f7-nav-right>

@@ -165,6 +165,7 @@ import moment from 'moment';
     },
     mounted() {
       this.$f7ready((f7) => {
+        
          document.getElementById("logo").style.display="none";
           ymaps.ready(() =>{
             var inputSearch = new ymaps.control.SearchControl({

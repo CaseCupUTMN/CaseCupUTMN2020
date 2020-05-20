@@ -3,17 +3,20 @@
     <f7-toolbar tabbar bottom labels>
       <f7-link tab-link-active tab-link="#all-games" text="Все игры" icon-f7="layers_alt"></f7-link>
       <f7-link tab-link="#current-games" text="Я участник" icon-f7="person_crop_circle_badge_checkmark"></f7-link>
-      <!--<f7-link tab-link="#user-score" text="Мои достижения" icon-f7="star_circle"></f7-link>-->
+      
     </f7-toolbar>
 
     <f7-tabs animated swipeable>
-      <f7-page-content tab tab-active id="all-games" ptr @ptr:refresh="refreshAll" @tab:show="onTabAllShow">
-        <f7-fab position="right-bottom" color="#00bfad" href="/new-game/" >
+      <f7-tab tab-active id="all-games">
+      <f7-fab position="right-bottom" color="#00bfad" href="/new-game/" >
           <f7-icon f7="plus"></f7-icon>
         </f7-fab>
+      <f7-page-content  ptr @ptr:refresh="refreshAll" infinite :infinite-distance="50" :infinite-preloader="loadInProgress" @infinite="loadMoreAll">
+        
         
         <template v-if="!games.all.length">
           <f7-block>
+           
             <f7-block-footer class="text-align-center">Не запланировано ни одной игры</f7-block-footer>
           </f7-block>
         </template>
@@ -33,7 +36,7 @@
         </template>
        
       </f7-page-content>
-
+      </f7-tab>
       <f7-page-content tab id="current-games" ptr @ptr:refresh="refreshCurrent" @tab:show="onTabCurrentShow">
         <template v-if="!games.current.length">
         <f7-block >
@@ -60,16 +63,16 @@
   </f7-page>
 </template>
 <style>
-.fab{
-      position: fixed;
-}
+
 </style>
 <script>
 import moment from 'moment';
+import routes from '../js/routes';
 export default {
   data() {
     return {
       loadInProgress: false,
+      hasMoreAll:true,
       games: {
         all: [
         ],
@@ -81,6 +84,38 @@ export default {
   },
 
   methods: {
+    async loadMoreAll(){
+      
+      if(!this.hasMoreAll) return;
+      this.loadInProgress=true;
+      try{
+        const gameDate=await this.$f7.request.promise.json('https://app.seon.cloud/hiddencodes/v1.0/games',{
+          skip:this.games.all.length
+        });
+        for(let item of gameDate.data.data){
+         
+             this.games.all.push({
+                      title:item.title,
+                      id:item._id,
+                      players:{
+                        current:item.players.length,
+                        max:item.maxPlayers
+                      },
+                      startDate:this.getNormDate(item.startDate),
+                      description:item.description
+        });
+        }
+       
+        this.hasMoreAll=this.games.all.length > gameDate.data.data.length;
+      }
+      catch({xhr}){
+        
+        this.$f7.dialog.alert("Ошибка");
+      };
+      this.loadInProgress=false;
+    },
+    
+    
     tabAllShow() {
       
       this.onTabAllShow();
@@ -107,6 +142,7 @@ export default {
                       description:item.description
                     });
           }
+          
        });
     },
     refreshAll(done) {
@@ -181,6 +217,7 @@ export default {
   },
   mounted() {
     this.$f7ready((f7) => {
+      
       document.getElementById("logo").style.display="block";
       localStorage.idgame='';
           var app=this;
