@@ -114,7 +114,7 @@ export default {
         });
         }
        console.log(gameDate);
-        this.hasMoreAll=this.games.all.length <= (gameDate.data.total-1)*10;
+        this.hasMoreAll=this.games.all.length < gameDate.data.meta.total;
         
       }
       catch({xhr}){
