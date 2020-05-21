@@ -290,7 +290,7 @@ export default {
                       players:item.players,
                       maxPlayers:item.maxPlayers,
                       startDate:app.getNormDate(item.startDate),
-                      endDate:app.getNormDate(item.endDate),
+                      endDate:app.getDateTime(item.endDate),
                       description:item.description
                     });
           console.log(app.data[0].players);
