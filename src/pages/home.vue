@@ -91,7 +91,8 @@ export default {
       this.loadInProgress=true;
       try{
         const gameDate=await this.$f7.request.promise.json('https://app.seon.cloud/hiddencodes/v1.0/games',{
-          skip:this.games.all.length
+          skip:this.games.all.length,
+          sort:"-startDate"
         });
         /*this.countAll+=1;
         this.hasMoreAll=gameDate.data.total > this.countAll;*/
@@ -131,7 +132,9 @@ export default {
     },
     onTabAllShow(){
       var app=this;
-      this.$f7.request.json('https://app.seon.cloud/hiddencodes/v1.0/games' ,function  (res){
+      this.$f7.request.json('https://app.seon.cloud/hiddencodes/v1.0/games' ,{
+        sort:"-startDate"
+      },function  (res){
           if (res.message) {
             
             return console.error(res.message);
@@ -158,7 +161,10 @@ export default {
       
       setTimeout(() => {
         var app=this;
-      this.$f7.request.json('https://app.seon.cloud/hiddencodes/v1.0/games' ,function  (res){
+      this.$f7.request.json('https://app.seon.cloud/hiddencodes/v1.0/games' ,
+      {
+        sort:"-startDate"
+      },function  (res){
           if (res.message) {
             
             return console.error(res.message);
