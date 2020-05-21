@@ -73,6 +73,7 @@ export default {
     return {
       loadInProgress: false,
       hasMoreAll:true,
+      countAll:0,
       games: {
         all: [
         ],
@@ -86,12 +87,19 @@ export default {
   methods: {
     async loadMoreAll(){
       
-      if(!this.hasMoreAll) return;
+      if(!this.hasMoreAll)  return;
       this.loadInProgress=true;
       try{
         const gameDate=await this.$f7.request.promise.json('https://app.seon.cloud/hiddencodes/v1.0/games',{
           skip:this.games.all.length
         });
+        /*this.countAll+=1;
+        this.hasMoreAll=gameDate.data.total > this.countAll;*/
+        if(gameDate.data.data.length==0){
+          this.hasMoreAll=false;
+          this.loadInProgress=false;
+          return;
+        }
         for(let item of gameDate.data.data){
          
              this.games.all.push({
@@ -105,8 +113,9 @@ export default {
                       description:item.description
         });
         }
-       
-        this.hasMoreAll=this.games.all.length > gameDate.data.data.length;
+       console.log(gameDate);
+        this.hasMoreAll=this.games.all.length <= (gameDate.data.total-1)*10;
+        
       }
       catch({xhr}){
         
@@ -154,6 +163,7 @@ export default {
             
             return console.error(res.message);
           }
+          delete app.games.all;
           app.games.all=[];
           for(let item of res.data){
             

@@ -339,6 +339,9 @@ export default {
     getNormDate(value){
         return new Date(value.split("-")[0],value.split("-")[1]-1,value.split("-")[2].split("T")[0],value.split("-")[2].split("T")[1].split(":")[0],value.split("-")[2].split("T")[1].split(":")[1]);
     },
+    getDateTime(value){
+       return value ? moment(value).format('YYYY-MM-DD HH:mm') : '-1';
+    },
   },
   
    mounted() {
@@ -363,12 +366,13 @@ export default {
             //new Date(item.startDate.split("-")[0],item.startDate.split("-")[1]-1,item.startDate.split("-")[2].split("T")[0],item.startDate.split("-")[2].split("T")[1].split(":")[0],item.startDate.split("-")[2].split("T")[1].split(":")[1]);
           console.log(tdate);
           console.log(tdate.getTime()+" "+dat.getTime());
+          
           app.data.push({
                       title:item.title,
                       id:item._id,
                       players:item.players,
                       maxPlayers:item.maxPlayers,
-                      endDate:app.getNormDate(item.endDate),
+                      endDate:app.getDateTime(item.endDate),
                       startDate:app.getNormDate(item.startDate),
                       description:item.description
                     });

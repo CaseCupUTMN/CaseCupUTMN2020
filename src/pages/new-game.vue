@@ -113,6 +113,9 @@ import moment from 'moment';
       //return value ? moment(value).format('DD.MM.YY в HH:mm') : 'дата неизвестна';
       return value ? moment(value).format('DD.MM.YYYY') : 'дата неизвестна';
     },
+    getDateTime(value){
+       return value ? moment(value).format('YYYY-MM-DD HH:mm') : '-1';
+    },
    gettime(value){
        return value ? moment(value).format('DD.MM.YYYY HH:mm') : '-1';
     },
@@ -120,12 +123,12 @@ import moment from 'moment';
           this.$f7.dialog.alert(error);    
       },
       next(){
-
+          var app=this;
           if(this.namegame=='' || this.date==''|| this.gettime(this.date)=='-1' || this.time==''|| this.count_players=='' || this.description==''||  metka==0){
               this.errorAlert('Не все поля заполнены!');
           }
           else{
-             let dat=new Date();
+            let dat=new Date();
             let strdat=this.formatDate(this.date).split('.');
             let tdate=new Date(strdat[2],strdat[1]-1,strdat[0],this.gettime(this.date).split(' ')[1].split(':')[0],this.gettime(this.date).split(' ')[1].split(':')[1]);
             
@@ -139,8 +142,8 @@ import moment from 'moment';
               this.$f7.request.postJSON('https://app.seon.cloud/hiddencodes/v1.0/games', {
                 title:this.namegame,
                 description:this.description,
-                startDate:tdate,
-                endDate:enddate,
+                startDate:app.getDateTime(tdate),
+                endDate:app.getDateTime(enddate),
                 author:localStorage.user_uuid,
                 maxPlayers:this.count_players,
                 points:points
