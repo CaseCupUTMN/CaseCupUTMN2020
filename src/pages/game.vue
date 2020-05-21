@@ -51,12 +51,12 @@
       </f7-page-content>
 
       <f7-page-content tab id="rating" @tab:show="onTabRatingShow">
-        <template v-if="!rating.length">
+        <template >
           <f7-block>
             <f7-block-footer class="text-align-center">Нет информации о рейтинге</f7-block-footer>
           </f7-block>
         </template>
-        <template v-else>
+        <!--<template v-else>
           <f7-list media-list class="no-margin-vertical">
             <f7-list-item v-for="(item, i) in rating" :key="item.id"
               :title="item.user"
@@ -66,7 +66,7 @@
               <div class="place" slot="media">{{i+1}}</div>
             </f7-list-item>
           </f7-list>
-        </template>
+        </template>-->
       </f7-page-content>
     </f7-tabs>
   </f7-page>
